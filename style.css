@@ -130,7 +130,6 @@ body {
 
 /* ── Splash Screen ── */
 #splash-screen {
-  display: flex;
   align-items: center;
   justify-content: center;
   background: var(--gradient-hero);
@@ -138,6 +137,11 @@ body {
   text-align: center;
   position: relative;
   overflow: hidden;
+}
+
+/* Only use flex layout when splash is the active screen */
+#splash-screen.active {
+  display: flex;
 }
 
 .splash-container {
