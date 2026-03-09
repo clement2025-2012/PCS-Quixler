@@ -1,4 +1,34 @@
+const express = require('express');
+const path = require('path');
+const app = express();
+
+const PORT = process.env.PORT || 3000;
+
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Serve ads.txt
+app.get('/ads.txt', (req, res) => {
+  res.sendFile(path.join(__dirname, 'ads.txt'));
+});
+
+// Home route
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
+
+// ============================================================
 // PCS Academy Quiz Application - SUPER Enhanced JavaScript
+// ============================================================
+
 class PCSQuizApp {
     constructor() {
         this.currentScreen = 'splash-screen';
@@ -25,7 +55,7 @@ class PCSQuizApp {
             {
                 id: 2,
                 category: "Mathematics",
-                difficulty: "Easy", 
+                difficulty: "Easy",
                 question: "What is the square root of 144?",
                 options: ["11", "12", "13", "14"],
                 correct: 1,
@@ -199,18 +229,14 @@ class PCSQuizApp {
     }
 
     init() {
-        // Show splash screen for 4 seconds with enhanced animation
         this.showSplashScreen();
         setTimeout(() => {
             this.showScreen('home-screen');
         }, 4000);
-
-        // Set up event listeners
         this.setupEventListeners();
     }
 
     showSplashScreen() {
-        // Enhanced splash screen animations
         const particles = document.querySelectorAll('.particle');
         particles.forEach((particle, index) => {
             particle.style.animationDelay = `${index * 0.5}s`;
@@ -218,7 +244,6 @@ class PCSQuizApp {
     }
 
     setupEventListeners() {
-        // Quiz button listeners
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('option-button')) {
                 this.selectAnswer(e.target);
@@ -228,46 +253,27 @@ class PCSQuizApp {
         const submitButton = document.getElementById('submit-answer');
         const nextButton = document.getElementById('next-question');
 
-        if (submitButton) {
-            submitButton.addEventListener('click', () => this.submitAnswer());
-        }
+        if (submitButton) submitButton.addEventListener('click', () => this.submitAnswer());
+        if (nextButton) nextButton.addEventListener('click', () => this.nextQuestion());
 
-        if (nextButton) {
-            nextButton.addEventListener('click', () => this.nextQuestion());
-        }
-
-        // Enhanced keyboard navigation
         document.addEventListener('keydown', (e) => {
             if (this.currentScreen === 'quiz-screen') {
                 switch(e.key.toLowerCase()) {
-                    case 'a':
-                        this.selectAnswerByIndex(0);
-                        break;
-                    case 'b':
-                        this.selectAnswerByIndex(1);
-                        break;
-                    case 'c':
-                        this.selectAnswerByIndex(2);
-                        break;
-                    case 'd':
-                        this.selectAnswerByIndex(3);
-                        break;
+                    case 'a': this.selectAnswerByIndex(0); break;
+                    case 'b': this.selectAnswerByIndex(1); break;
+                    case 'c': this.selectAnswerByIndex(2); break;
+                    case 'd': this.selectAnswerByIndex(3); break;
                     case 'enter':
-                        if (this.selectedAnswer !== null) {
-                            this.submitAnswer();
-                        }
+                        if (this.selectedAnswer !== null) this.submitAnswer();
                         break;
                     case ' ':
                         e.preventDefault();
-                        if (this.selectedAnswer !== null) {
-                            this.submitAnswer();
-                        }
+                        if (this.selectedAnswer !== null) this.submitAnswer();
                         break;
                 }
             }
         });
 
-        // Newsletter form
         const newsletterForm = document.querySelector('.newsletter-form');
         if (newsletterForm) {
             newsletterForm.addEventListener('submit', (e) => {
@@ -278,7 +284,6 @@ class PCSQuizApp {
     }
 
     showScreen(screenId) {
-        // Enhanced screen transitions
         const currentScreenEl = document.querySelector('.screen.active');
         const targetScreenEl = document.getElementById(screenId);
 
@@ -298,39 +303,26 @@ class PCSQuizApp {
 
                     this.currentScreen = screenId;
 
-                    // Initialize quiz if entering quiz screen
-                    if (screenId === 'quiz-screen') {
-                        this.startQuiz();
-                    }
+                    if (screenId === 'quiz-screen') this.startQuiz();
 
-                    // Scroll to top
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             }, 300);
         } else {
-            // First screen load
             if (targetScreenEl) {
                 targetScreenEl.classList.add('active');
                 this.currentScreen = screenId;
-
-                if (screenId === 'quiz-screen') {
-                    this.startQuiz();
-                }
+                if (screenId === 'quiz-screen') this.startQuiz();
             }
         }
     }
 
     startQuiz() {
-        // Reset quiz state
         this.currentQuestion = 0;
         this.userAnswers = [];
         this.score = 0;
         this.selectedAnswer = null;
-
-        // Shuffle and select questions
         this.quizQuestions = this.shuffleArray([...this.questionDB]).slice(0, this.totalQuestions);
-
-        // Show first question
         this.displayQuestion();
         this.updateProgressBar();
         this.startTimer();
@@ -339,11 +331,9 @@ class PCSQuizApp {
     displayQuestion() {
         const question = this.quizQuestions[this.currentQuestion];
 
-        // Update question counter
-        document.getElementById('question-counter').textContent = 
+        document.getElementById('question-counter').textContent =
             `Question ${this.currentQuestion + 1} of ${this.quizQuestions.length}`;
 
-        // Update category and difficulty
         const categoryEl = document.getElementById('question-category');
         const difficultyEl = document.getElementById('question-difficulty');
 
@@ -353,10 +343,8 @@ class PCSQuizApp {
             difficultyEl.className = `question-difficulty ${question.difficulty.toLowerCase()}`;
         }
 
-        // Update question text
         document.getElementById('question-text').textContent = question.question;
 
-        // Update options with enhanced styling
         const optionsContainer = document.getElementById('options-container');
         optionsContainer.innerHTML = '';
 
@@ -373,45 +361,32 @@ class PCSQuizApp {
             optionsContainer.appendChild(button);
         });
 
-        // Reset selected answer
         this.selectedAnswer = null;
 
-        // Show submit button, hide next button
         document.getElementById('submit-answer').style.display = 'inline-flex';
         document.getElementById('next-question').style.display = 'none';
 
-        // Reset and start timer
         this.timeLeft = 30;
         this.startTimer();
 
-        // Remove any previous explanations
         const existingExplanation = document.querySelector('.explanation');
-        if (existingExplanation) {
-            existingExplanation.remove();
-        }
+        if (existingExplanation) existingExplanation.remove();
     }
 
     selectAnswer(button) {
-        // Remove previous selection
         const options = document.querySelectorAll('.option-button');
         options.forEach(opt => opt.classList.remove('selected'));
 
-        // Add selection to clicked button with animation
         button.classList.add('selected');
         this.selectedAnswer = parseInt(button.dataset.index);
 
-        // Add subtle animation
         button.style.transform = 'scale(1.02)';
-        setTimeout(() => {
-            button.style.transform = '';
-        }, 150);
+        setTimeout(() => { button.style.transform = ''; }, 150);
     }
 
     selectAnswerByIndex(index) {
         const options = document.querySelectorAll('.option-button');
-        if (options[index]) {
-            this.selectAnswer(options[index]);
-        }
+        if (options[index]) this.selectAnswer(options[index]);
     }
 
     submitAnswer() {
@@ -423,13 +398,10 @@ class PCSQuizApp {
         const question = this.quizQuestions[this.currentQuestion];
         const options = document.querySelectorAll('.option-button');
 
-        // Stop timer
         clearInterval(this.timer);
 
-        // Show correct/incorrect answers with enhanced animation
         options.forEach((option, index) => {
             option.disabled = true;
-
             if (index === question.correct) {
                 option.classList.add('correct');
                 this.addCheckmark(option);
@@ -439,7 +411,6 @@ class PCSQuizApp {
             }
         });
 
-        // Record answer
         const isCorrect = this.selectedAnswer === question.correct;
         this.userAnswers.push({
             questionId: question.id,
@@ -457,10 +428,8 @@ class PCSQuizApp {
             this.showNotification('Incorrect. Learn from this! 📚', 'error');
         }
 
-        // Show explanation
         this.showExplanation(question.explanation, isCorrect);
 
-        // Hide submit button, show next button
         document.getElementById('submit-answer').style.display = 'none';
         document.getElementById('next-question').style.display = 'inline-flex';
     }
@@ -480,7 +449,6 @@ class PCSQuizApp {
     }
 
     showExplanation(explanation, isCorrect) {
-        // Create enhanced explanation element
         const explanationDiv = document.createElement('div');
         explanationDiv.className = `explanation ${isCorrect ? 'correct' : 'incorrect'}`;
         explanationDiv.innerHTML = `
@@ -491,11 +459,9 @@ class PCSQuizApp {
             <div class="explanation-text">${explanation}</div>
         `;
 
-        // Add to question container
         const questionContainer = document.querySelector('.question-card');
         questionContainer.appendChild(explanationDiv);
 
-        // Animate in
         setTimeout(() => {
             explanationDiv.style.opacity = '1';
             explanationDiv.style.transform = 'translateY(0)';
@@ -504,7 +470,6 @@ class PCSQuizApp {
 
     nextQuestion() {
         this.currentQuestion++;
-
         if (this.currentQuestion < this.quizQuestions.length) {
             this.displayQuestion();
             this.updateProgressBar();
@@ -526,24 +491,12 @@ class PCSQuizApp {
         let message = '';
         let emoji = '';
 
-        if (percentage >= 90) {
-            message = 'Outstanding! Exceptional performance!';
-            emoji = '🏆';
-        } else if (percentage >= 80) {
-            message = 'Excellent work! Great job!';
-            emoji = '🎉';
-        } else if (percentage >= 70) {
-            message = 'Good job! Keep up the good work!';
-            emoji = '👍';
-        } else if (percentage >= 60) {
-            message = 'Fair performance. More practice needed.';
-            emoji = '📚';
-        } else {
-            message = 'Keep studying and try again!';
-            emoji = '💪';
-        }
+        if (percentage >= 90)      { message = 'Outstanding! Exceptional performance!'; emoji = '🏆'; }
+        else if (percentage >= 80) { message = 'Excellent work! Great job!';            emoji = '🎉'; }
+        else if (percentage >= 70) { message = 'Good job! Keep up the good work!';      emoji = '👍'; }
+        else if (percentage >= 60) { message = 'Fair performance. More practice needed.'; emoji = '📚'; }
+        else                       { message = 'Keep studying and try again!';           emoji = '💪'; }
 
-        // Calculate category performance
         const categoryStats = this.calculateCategoryStats();
 
         const quizContainer = document.querySelector('.quiz-wrapper');
@@ -558,7 +511,6 @@ class PCSQuizApp {
                         </div>
                     </div>
                 </div>
-
                 <div class="results-summary">
                     <div class="summary-item">
                         <span class="summary-number">${this.score}</span>
@@ -573,11 +525,7 @@ class PCSQuizApp {
                         <span class="summary-label">Total</span>
                     </div>
                 </div>
-
-                <div class="results-message">
-                    <h3>${message}</h3>
-                </div>
-
+                <div class="results-message"><h3>${message}</h3></div>
                 <div class="category-performance">
                     <h3>Performance by Category</h3>
                     <div class="category-stats">
@@ -592,171 +540,52 @@ class PCSQuizApp {
                         `).join('')}
                     </div>
                 </div>
-
                 <div class="results-actions">
                     <button onclick="quizApp.startQuiz()" class="super-btn primary large">
-                        <span class="btn-icon">🔄</span>
-                        Take Quiz Again
+                        <span class="btn-icon">🔄</span> Take Quiz Again
                     </button>
                     <button onclick="quizApp.showScreen('home-screen')" class="super-btn secondary large">
-                        <span class="btn-icon">🏠</span>
-                        Back to Home
+                        <span class="btn-icon">🏠</span> Back to Home
                     </button>
                 </div>
             </div>
         `;
 
-        // Add results styling
         const style = document.createElement('style');
         style.textContent = `
-            .results-container {
-                max-width: 600px;
-                margin: 0 auto;
-                padding: 2rem;
-                text-align: center;
-                background: white;
-                border-radius: 20px;
-                box-shadow: 0 20px 40px rgba(41, 182, 246, 0.15);
-                border: 1px solid var(--sky-blue-100);
-            }
-            .results-header { margin-bottom: 2rem; }
-            .results-title { 
-                font-size: 2rem; 
-                color: var(--primary); 
-                margin-bottom: 1.5rem;
-                font-family: var(--font-secondary);
-            }
-            .results-score-circle {
-                width: 150px;
-                height: 150px;
-                margin: 0 auto;
-                border-radius: 50%;
-                background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                box-shadow: 0 10px 30px rgba(41, 182, 246, 0.3);
-            }
-            .score-circle-inner {
-                text-align: center;
-                color: white;
-            }
-            .score-percentage {
-                display: block;
-                font-size: 2.5rem;
-                font-weight: 800;
-                font-family: var(--font-secondary);
-            }
-            .score-label {
-                font-size: 1rem;
-                opacity: 0.9;
-                text-transform: uppercase;
-                letter-spacing: 0.05em;
-            }
-            .results-summary {
-                display: flex;
-                justify-content: space-around;
-                margin: 2rem 0;
-                padding: 1.5rem;
-                background: var(--sky-blue-50);
-                border-radius: 15px;
-                border: 1px solid var(--sky-blue-100);
-            }
-            .summary-item {
-                text-align: center;
-            }
-            .summary-number {
-                display: block;
-                font-size: 1.8rem;
-                font-weight: 700;
-                color: var(--primary);
-                font-family: var(--font-secondary);
-            }
-            .summary-label {
-                font-size: 0.9rem;
-                color: var(--gray-600);
-                text-transform: uppercase;
-                letter-spacing: 0.05em;
-            }
-            .results-message {
-                margin: 2rem 0;
-                padding: 1rem;
-                background: var(--white);
-                border-radius: 10px;
-                border-left: 4px solid var(--primary);
-            }
-            .results-message h3 {
-                color: var(--primary);
-                font-size: 1.2rem;
-            }
-            .category-performance {
-                margin: 2rem 0;
-                text-align: left;
-            }
-            .category-performance h3 {
-                text-align: center;
-                color: var(--primary);
-                margin-bottom: 1rem;
-            }
-            .category-stats {
-                display: flex;
-                flex-direction: column;
-                gap: 1rem;
-            }
-            .category-stat-item {
-                display: flex;
-                align-items: center;
-                gap: 1rem;
-            }
-            .category-name {
-                min-width: 120px;
-                font-weight: 600;
-                color: var(--gray-700);
-            }
-            .category-bar {
-                flex: 1;
-                height: 8px;
-                background: var(--gray-200);
-                border-radius: 4px;
-                overflow: hidden;
-            }
-            .category-fill {
-                height: 100%;
-                background: var(--gradient-primary);
-                transition: width 1s ease-in-out;
-            }
-            .category-percentage {
-                min-width: 50px;
-                font-weight: 600;
-                color: var(--primary);
-                font-size: 0.9rem;
-            }
-            .results-actions {
-                display: flex;
-                gap: 1rem;
-                justify-content: center;
-                flex-wrap: wrap;
-                margin-top: 2rem;
-            }
+            .results-container { max-width:600px; margin:0 auto; padding:2rem; text-align:center; background:white; border-radius:20px; box-shadow:0 20px 40px rgba(41,182,246,.15); border:1px solid var(--sky-blue-100); }
+            .results-header { margin-bottom:2rem; }
+            .results-title { font-size:2rem; color:var(--primary); margin-bottom:1.5rem; font-family:var(--font-secondary); }
+            .results-score-circle { width:150px; height:150px; margin:0 auto; border-radius:50%; background:linear-gradient(135deg,var(--primary),var(--primary-dark)); display:flex; align-items:center; justify-content:center; box-shadow:0 10px 30px rgba(41,182,246,.3); }
+            .score-circle-inner { text-align:center; color:white; }
+            .score-percentage { display:block; font-size:2.5rem; font-weight:800; font-family:var(--font-secondary); }
+            .score-label { font-size:1rem; opacity:.9; text-transform:uppercase; letter-spacing:.05em; }
+            .results-summary { display:flex; justify-content:space-around; margin:2rem 0; padding:1.5rem; background:var(--sky-blue-50); border-radius:15px; border:1px solid var(--sky-blue-100); }
+            .summary-item { text-align:center; }
+            .summary-number { display:block; font-size:1.8rem; font-weight:700; color:var(--primary); font-family:var(--font-secondary); }
+            .summary-label { font-size:.9rem; color:var(--gray-600); text-transform:uppercase; letter-spacing:.05em; }
+            .results-message { margin:2rem 0; padding:1rem; background:var(--white); border-radius:10px; border-left:4px solid var(--primary); }
+            .results-message h3 { color:var(--primary); font-size:1.2rem; }
+            .category-performance { margin:2rem 0; text-align:left; }
+            .category-performance h3 { text-align:center; color:var(--primary); margin-bottom:1rem; }
+            .category-stats { display:flex; flex-direction:column; gap:1rem; }
+            .category-stat-item { display:flex; align-items:center; gap:1rem; }
+            .category-name { min-width:120px; font-weight:600; color:var(--gray-700); }
+            .category-bar { flex:1; height:8px; background:var(--gray-200); border-radius:4px; overflow:hidden; }
+            .category-fill { height:100%; background:var(--gradient-primary); transition:width 1s ease-in-out; }
+            .category-percentage { min-width:50px; font-weight:600; color:var(--primary); font-size:.9rem; }
+            .results-actions { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-top:2rem; }
         `;
         document.head.appendChild(style);
     }
 
     calculateCategoryStats() {
         const categories = {};
-
-        // Initialize categories
         this.userAnswers.forEach(answer => {
-            if (!categories[answer.category]) {
-                categories[answer.category] = { correct: 0, total: 0 };
-            }
+            if (!categories[answer.category]) categories[answer.category] = { correct: 0, total: 0 };
             categories[answer.category].total++;
-            if (answer.isCorrect) {
-                categories[answer.category].correct++;
-            }
+            if (answer.isCorrect) categories[answer.category].correct++;
         });
-
-        // Convert to array with percentages
         return Object.keys(categories).map(category => ({
             category,
             correct: categories[category].correct,
@@ -775,18 +604,13 @@ class PCSQuizApp {
         this.timer = setInterval(() => {
             this.timeLeft--;
 
-            if (timerText) {
-                timerText.textContent = this.timeLeft;
-            }
+            if (timerText) timerText.textContent = this.timeLeft;
 
-            // Update circular progress
             if (timerProgress) {
                 const percentage = (this.timeLeft / 30) * 100;
-                const dashOffset = 100 - percentage;
-                timerProgress.style.strokeDashoffset = dashOffset;
+                timerProgress.style.strokeDashoffset = 100 - percentage;
             }
 
-            // Change color based on time remaining
             if (timerText) {
                 if (this.timeLeft <= 5) {
                     timerText.style.color = '#f44336';
@@ -802,9 +626,8 @@ class PCSQuizApp {
 
             if (this.timeLeft <= 0) {
                 clearInterval(this.timer);
-                // Auto-submit or move to next question
                 if (this.selectedAnswer === null) {
-                    this.showNotification('Time\'s up! Moving to next question.', 'warning');
+                    this.showNotification("Time's up! Moving to next question.", 'warning');
                     this.nextQuestion();
                 } else {
                     this.submitAnswer();
@@ -814,7 +637,6 @@ class PCSQuizApp {
     }
 
     showNotification(message, type = 'info') {
-        // Create notification element
         const notification = document.createElement('div');
         notification.className = `notification notification-${type}`;
         notification.innerHTML = `
@@ -823,54 +645,25 @@ class PCSQuizApp {
                 <button class="notification-close" onclick="this.parentElement.parentElement.remove()">×</button>
             </div>
         `;
-
-        // Add to page
         document.body.appendChild(notification);
 
-        // Style notification
         const style = document.createElement('style');
         style.textContent = `
-            .notification {
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                z-index: 10000;
-                max-width: 400px;
-                padding: 1rem;
-                border-radius: 10px;
-                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-                animation: slideInRight 0.3s ease-out;
-            }
-            .notification-success { background: #4caf50; color: white; }
-            .notification-error { background: #f44336; color: white; }
-            .notification-warning { background: #ff9800; color: white; }
-            .notification-info { background: var(--primary); color: white; }
-            .notification-content {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                gap: 1rem;
-            }
-            .notification-close {
-                background: none;
-                border: none;
-                color: inherit;
-                font-size: 1.5rem;
-                cursor: pointer;
-                opacity: 0.7;
-            }
-            .notification-close:hover { opacity: 1; }
-            @keyframes slideInRight {
-                from { transform: translateX(100%); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
-            }
+            .notification { position:fixed; top:20px; right:20px; z-index:10000; max-width:400px; padding:1rem; border-radius:10px; box-shadow:0 10px 25px rgba(0,0,0,.15); animation:slideInRight .3s ease-out; }
+            .notification-success { background:#4caf50; color:white; }
+            .notification-error   { background:#f44336; color:white; }
+            .notification-warning { background:#ff9800; color:white; }
+            .notification-info    { background:var(--primary); color:white; }
+            .notification-content { display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+            .notification-close   { background:none; border:none; color:inherit; font-size:1.5rem; cursor:pointer; opacity:.7; }
+            .notification-close:hover { opacity:1; }
+            @keyframes slideInRight { from { transform:translateX(100%); opacity:0; } to { transform:translateX(0); opacity:1; } }
         `;
         document.head.appendChild(style);
 
-        // Auto-remove after 5 seconds
         setTimeout(() => {
             if (notification.parentElement) {
-                notification.style.animation = 'slideOutRight 0.3s ease-in';
+                notification.style.animation = 'slideOutRight .3s ease-in';
                 setTimeout(() => notification.remove(), 300);
             }
         }, 5000);
@@ -879,7 +672,6 @@ class PCSQuizApp {
     handleNewsletterSignup() {
         const input = document.querySelector('.newsletter-input');
         const email = input.value.trim();
-
         if (email && this.isValidEmail(email)) {
             this.showNotification('Thank you for subscribing! 📧', 'success');
             input.value = '';
@@ -889,8 +681,7 @@ class PCSQuizApp {
     }
 
     isValidEmail(email) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     }
 
     shuffleArray(array) {
@@ -903,37 +694,35 @@ class PCSQuizApp {
     }
 }
 
-// Global functions for HTML onclick handlers
+// ============================================================
+// Global helpers for HTML onclick handlers
+// ============================================================
+
 function showScreen(screenId) {
-    if (window.quizApp) {
-        window.quizApp.showScreen(screenId);
-    }
+    if (window.quizApp) window.quizApp.showScreen(screenId);
 }
 
-// Initialize app when DOM is loaded
+// ============================================================
+// DOM Initialisation
+// ============================================================
+
 document.addEventListener('DOMContentLoaded', function() {
     window.quizApp = new PCSQuizApp();
 
-    // Add smooth scrolling for anchor links
+    // Smooth scrolling for anchor links
     document.addEventListener('click', function(e) {
         if (e.target.tagName === 'A' && e.target.getAttribute('href')?.startsWith('#')) {
             e.preventDefault();
             const target = document.querySelector(e.target.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     });
 
-    // Add loading animation
     window.addEventListener('load', function() {
         document.body.classList.add('loaded');
     });
 
-    // Performance optimization: Lazy load images
+    // Lazy-load images
     if ('IntersectionObserver' in window) {
         const imageObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
@@ -947,80 +736,48 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         });
-
-        document.querySelectorAll('img[data-src]').forEach(img => {
-            imageObserver.observe(img);
-        });
+        document.querySelectorAll('img[data-src]').forEach(img => imageObserver.observe(img));
     }
 
-    // Add enhanced interactions
     addEnhancedInteractions();
 });
 
 function addEnhancedInteractions() {
-    // Add hover effects to cards
     const cards = document.querySelectorAll('.feature-card, .question-card, .contact-method');
     cards.forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-5px)';
-        });
-
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0)';
-        });
+        card.addEventListener('mouseenter', function() { this.style.transform = 'translateY(-5px)'; });
+        card.addEventListener('mouseleave', function() { this.style.transform = 'translateY(0)'; });
     });
 
-    // Add click ripple effect to buttons
     const buttons = document.querySelectorAll('.super-btn, .option-button');
     buttons.forEach(button => {
         button.addEventListener('click', function(e) {
             const ripple = document.createElement('div');
             ripple.className = 'button-ripple';
-
             const rect = this.getBoundingClientRect();
             const size = Math.max(rect.width, rect.height);
             const x = e.clientX - rect.left - size / 2;
             const y = e.clientY - rect.top - size / 2;
-
-            ripple.style.cssText = `
-                position: absolute;
-                width: ${size}px;
-                height: ${size}px;
-                left: ${x}px;
-                top: ${y}px;
-                background: rgba(255, 255, 255, 0.3);
-                border-radius: 50%;
-                transform: scale(0);
-                animation: buttonRipple 0.6s linear;
-                pointer-events: none;
-            `;
-
+            ripple.style.cssText = `position:absolute;width:${size}px;height:${size}px;left:${x}px;top:${y}px;background:rgba(255,255,255,.3);border-radius:50%;transform:scale(0);animation:buttonRipple .6s linear;pointer-events:none;`;
             this.style.position = 'relative';
             this.style.overflow = 'hidden';
             this.appendChild(ripple);
-
             setTimeout(() => ripple.remove(), 600);
         });
     });
 
-    // Add button ripple animation
     const style = document.createElement('style');
     style.textContent = `
-        @keyframes buttonRipple {
-            to {
-                transform: scale(2);
-                opacity: 0;
-            }
-        }
-        @keyframes slideOutRight {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
-        }
+        @keyframes buttonRipple { to { transform:scale(2); opacity:0; } }
+        @keyframes slideOutRight { from { transform:translateX(0); opacity:1; } to { transform:translateX(100%); opacity:0; } }
     `;
     document.head.appendChild(style);
 }
 
-// Add additional utility functions
+// ============================================================
+// Utility helpers
+// ============================================================
+
 function formatTime(seconds) {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
@@ -1031,5 +788,4 @@ function generateUniqueId() {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
 }
 
-// Export for potential future use
 window.PCSQuizApp = PCSQuizApp;
