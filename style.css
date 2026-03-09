@@ -117,15 +117,10 @@ body {
 .screen {
   display: none;
   min-height: 100vh;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all var(--transition-normal);
 }
 
 .screen.active {
   display: block;
-  opacity: 1;
-  transform: translateY(0);
 }
 
 /* ── Splash Screen ── */
