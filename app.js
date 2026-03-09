@@ -512,3 +512,25 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 window.PCSQuizApp = PCSQuizApp;
+
+// ── Contact Form Handler (replaces mailto: form action) ──────
+function handleContactForm(e) {
+    e.preventDefault();
+    var name    = (document.getElementById('name')    || {}).value || '';
+    var email   = (document.getElementById('email')   || {}).value || '';
+    var subject = (document.getElementById('subject') || {}).value || '';
+    var message = (document.getElementById('message') || {}).value || '';
+
+    if (!name || !email || !subject || !message) {
+        if (window.quizApp) window.quizApp.showNotification('Please fill in all fields.', 'warning');
+        return;
+    }
+
+    // Open default mail client with pre-filled fields (no mixed-content issue)
+    var body = encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\n\n' + message);
+    var sub  = encodeURIComponent(subject + ' - ' + name);
+    window.location.href = 'mailto:pcsacademyschool@gmail.com?subject=' + sub + '&body=' + body;
+
+    if (window.quizApp) window.quizApp.showNotification('Opening your email client...', 'success');
+    document.getElementById('contact-form').reset();
+}
