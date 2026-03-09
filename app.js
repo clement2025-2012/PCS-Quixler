@@ -47,7 +47,18 @@ class PCSQuizApp {
         document.querySelectorAll('.particle').forEach((p, i) => {
             p.style.animationDelay = `${i * 0.5}s`;
         });
-        setTimeout(() => this.showScreen('home-screen'), 4000);
+        setTimeout(() => {
+            this.showScreen('home-screen');
+            // Push AdSense AFTER home screen is visible so container has real width
+            setTimeout(() => {
+                try {
+                    const slot = document.getElementById('pcs-ad-slot');
+                    if (slot && !slot.getAttribute('data-adsbygoogle-status')) {
+                        (window.adsbygoogle = window.adsbygoogle || []).push({});
+                    }
+                } catch(e) { console.warn('AdSense push failed:', e); }
+            }, 500);
+        }, 4000);
         this.setupEventListeners();
     }
 
