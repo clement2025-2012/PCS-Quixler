@@ -1,7 +1,6 @@
 // ============================================================
-// PCS Academy Quiz Application
-// ⚠️  BROWSER-ONLY FILE — no require(), no Node.js code here
-//     Server code lives entirely in server.js
+// PCS Academy Quiz Application — BROWSER ONLY
+// ⚠️  NO require() / Node.js code here. Server lives in server.js
 // ============================================================
 
 class PCSQuizApp {
@@ -28,12 +27,12 @@ class PCSQuizApp {
             { id:9,  category:"Mathematics",       difficulty:"Medium", question:"What is 12 × 15?",                                              options:["180","175","185","170"],                                                  correct:0, explanation:"12 × 15 = 180. Calculate as (12×10)+(12×5) = 120+60." },
             { id:10, category:"Science",           difficulty:"Medium", question:"What is the chemical symbol for gold?",                         options:["Go","Gd","Au","Ag"],                                                      correct:2, explanation:"Au comes from the Latin word 'aurum' meaning gold." },
             { id:11, category:"Mathematics",       difficulty:"Easy",   question:"What is 100 - 37?",                                             options:["63","62","64","61"],                                                      correct:0, explanation:"100 - 37 = 63." },
-            { id:12, category:"Science",           difficulty:"Easy",   question:"Which planet is known as the Red Planet?",                      options:["Venus","Mars","Jupiter","Saturn"],                                        correct:1, explanation:"Mars looks red due to iron oxide (rust) covering its surface." },
+            { id:12, category:"Science",           difficulty:"Easy",   question:"Which planet is known as the Red Planet?",                      options:["Venus","Mars","Jupiter","Saturn"],                                        correct:1, explanation:"Mars looks red due to iron oxide (rust) on its surface." },
             { id:13, category:"General Knowledge", difficulty:"Easy",   question:"How many continents are there on Earth?",                       options:["5","6","7","8"],                                                          correct:2, explanation:"7 continents: Asia, Africa, North America, South America, Antarctica, Europe, Australia." },
             { id:14, category:"History",           difficulty:"Medium", question:"Who built the Taj Mahal?",                                      options:["Akbar","Shah Jahan","Humayun","Aurangzeb"],                               correct:1, explanation:"Shah Jahan built the Taj Mahal (~1653) in memory of his wife Mumtaz Mahal." },
             { id:15, category:"Mathematics",       difficulty:"Medium", question:"What is 25% of 80?",                                            options:["15","20","25","30"],                                                      correct:1, explanation:"25% of 80 = 80 ÷ 4 = 20." },
             { id:16, category:"English",           difficulty:"Easy",   question:"What is the plural form of 'child'?",                           options:["childs","childes","children","childs'"],                                  correct:2, explanation:"'Children' is the irregular plural of 'child'." },
-            { id:17, category:"English",           difficulty:"Medium", question:"Which word is a synonym for 'happy'?",                          options:["Sad","Joyful","Angry","Tired"],                                           correct:1, explanation:"'Joyful' is a synonym for 'happy' — both express positive emotions." },
+            { id:17, category:"English",           difficulty:"Medium", question:"Which word is a synonym for 'happy'?",                          options:["Sad","Joyful","Angry","Tired"],                                           correct:1, explanation:"'Joyful' is a synonym for 'happy', both express positive emotions." },
             { id:18, category:"Science",           difficulty:"Medium", question:"What is the process where water changes from liquid to gas?",    options:["Condensation","Evaporation","Precipitation","Sublimation"],               correct:1, explanation:"Evaporation is the liquid-to-gas change driven by heat energy." },
             { id:19, category:"General Knowledge", difficulty:"Medium", question:"Which is the longest river in the world?",                      options:["Amazon River","Nile River","Mississippi River","Yangtze River"],         correct:1, explanation:"The Nile (~6,650 km) is generally considered the world's longest river." },
             { id:20, category:"History",           difficulty:"Easy",   question:"What year was PCS Academy School established?",                 options:["2020","2021","2022","2023"],                                              correct:2, explanation:"PCS Academy School was established in 2022." }
@@ -45,20 +44,15 @@ class PCSQuizApp {
 
     // ── Boot ───────────────────────────────────────────────────
     init() {
-        this.animateSplashParticles();
+        document.querySelectorAll('.particle').forEach((p, i) => {
+            p.style.animationDelay = `${i * 0.5}s`;
+        });
         setTimeout(() => this.showScreen('home-screen'), 4000);
         this.setupEventListeners();
     }
 
-    animateSplashParticles() {
-        document.querySelectorAll('.particle').forEach((p, i) => {
-            p.style.animationDelay = `${i * 0.5}s`;
-        });
-    }
-
-    // ── Event listeners ────────────────────────────────────────
+    // ── Events ─────────────────────────────────────────────────
     setupEventListeners() {
-        // Answer selection (event delegation)
         document.addEventListener('click', (e) => {
             const btn = e.target.closest('.option-button');
             if (btn && !btn.disabled) this.selectAnswer(btn);
@@ -69,24 +63,22 @@ class PCSQuizApp {
         document.getElementById('next-question')
             ?.addEventListener('click', () => this.nextQuestion());
 
-        // Keyboard shortcuts A/B/C/D + Enter/Space
         document.addEventListener('keydown', (e) => {
             if (this.currentScreen !== 'quiz-screen') return;
-            const keyMap = { a:0, b:1, c:2, d:3 };
-            if (keyMap[e.key.toLowerCase()] !== undefined) {
-                this.selectAnswerByIndex(keyMap[e.key.toLowerCase()]);
+            const map = { a:0, b:1, c:2, d:3 };
+            if (map[e.key.toLowerCase()] !== undefined) {
+                this.selectAnswerByIndex(map[e.key.toLowerCase()]);
             } else if ((e.key === 'Enter' || e.key === ' ') && this.selectedAnswer !== null) {
                 e.preventDefault();
                 this.submitAnswer();
             }
         });
 
-        // Newsletter
         document.querySelector('.newsletter-form')
             ?.addEventListener('submit', (e) => { e.preventDefault(); this.handleNewsletterSignup(); });
     }
 
-    // ── Screen navigation ──────────────────────────────────────
+    // ── Screen transitions ─────────────────────────────────────
     showScreen(screenId) {
         const current = document.querySelector('.screen.active');
         const target  = document.getElementById(screenId);
@@ -112,13 +104,66 @@ class PCSQuizApp {
         }
     }
 
-    // ── Quiz lifecycle ─────────────────────────────────────────
+    // ── Quiz ───────────────────────────────────────────────────
     startQuiz() {
         this.currentQuestion = 0;
         this.userAnswers     = [];
         this.score           = 0;
         this.selectedAnswer  = null;
         this.quizQuestions   = this.shuffleArray([...this.questionDB]).slice(0, this.totalQuestions);
+
+        // Restore quiz markup if results were shown
+        const wrapper = document.querySelector('.quiz-wrapper');
+        if (!wrapper.querySelector('.quiz-header')) {
+            wrapper.innerHTML = `
+                <div class="quiz-header">
+                    <button onclick="showScreen('home-screen')" class="super-back-btn">
+                        <span class="btn-icon">←</span> Back to Home
+                    </button>
+                    <div class="quiz-progress-info">
+                        <div class="question-indicator">
+                            <span id="question-counter" class="question-number">Question 1 of 10</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-fill"></div>
+                            </div>
+                        </div>
+                        <div class="timer-container">
+                            <div class="timer-circle">
+                                <div class="timer-text" id="timer">30</div>
+                                <svg class="timer-svg" viewBox="0 0 36 36">
+                                    <circle cx="18" cy="18" r="16" fill="none" stroke="#e0f2fe" stroke-width="2"/>
+                                    <circle id="timer-progress" cx="18" cy="18" r="16" fill="none" stroke="#29b6f6" stroke-width="2" stroke-dasharray="100 100" stroke-dashoffset="0"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="quiz-content">
+                    <div class="question-card">
+                        <div class="question-header">
+                            <span class="question-category" id="question-category">Mathematics</span>
+                            <span class="question-difficulty" id="question-difficulty">Easy</span>
+                        </div>
+                        <h2 id="question-text" class="question-title">Loading question...</h2>
+                    </div>
+                    <div class="options-grid" id="options-container"></div>
+                    <div class="quiz-actions">
+                        <button id="submit-answer" class="super-btn primary large">
+                            <span class="btn-icon">✓</span> Submit Answer
+                        </button>
+                        <button id="next-question" class="super-btn primary large" style="display:none;">
+                            <span class="btn-icon">→</span> Next Question
+                        </button>
+                    </div>
+                </div>`;
+
+            // Re-attach button listeners after DOM rebuild
+            document.getElementById('submit-answer')
+                .addEventListener('click', () => this.submitAnswer());
+            document.getElementById('next-question')
+                .addEventListener('click', () => this.nextQuestion());
+        }
+
         this.displayQuestion();
         this.updateProgressBar();
     }
@@ -126,51 +171,41 @@ class PCSQuizApp {
     displayQuestion() {
         const q = this.quizQuestions[this.currentQuestion];
 
-        // Header info
-        const counterEl = document.getElementById('question-counter');
-        if (counterEl) counterEl.textContent = `Question ${this.currentQuestion + 1} of ${this.quizQuestions.length}`;
+        document.getElementById('question-counter').textContent =
+            `Question ${this.currentQuestion + 1} of ${this.quizQuestions.length}`;
 
         const catEl  = document.getElementById('question-category');
         const diffEl = document.getElementById('question-difficulty');
         if (catEl)  catEl.textContent  = q.category;
-        if (diffEl) { diffEl.textContent = q.difficulty; diffEl.className = `question-difficulty ${q.difficulty.toLowerCase()}`; }
-
-        // Question text
-        const textEl = document.getElementById('question-text');
-        if (textEl) textEl.textContent = q.question;
-
-        // Answer options
-        const container = document.getElementById('options-container');
-        if (container) {
-            container.innerHTML = '';
-            q.options.forEach((opt, i) => {
-                const btn = document.createElement('button');
-                btn.className     = 'option-button';
-                btn.dataset.index = i;
-                btn.innerHTML     = `
-                    <div class="option-content">
-                        <span class="option-letter">${String.fromCharCode(65 + i)}</span>
-                        <span class="option-text">${opt}</span>
-                    </div>`;
-                container.appendChild(btn);
-            });
+        if (diffEl) {
+            diffEl.textContent = q.difficulty;
+            diffEl.className   = `question-difficulty ${q.difficulty.toLowerCase()}`;
         }
 
-        // Reset state
-        this.selectedAnswer = null;
-        const submitBtn = document.getElementById('submit-answer');
-        const nextBtn   = document.getElementById('next-question');
-        if (submitBtn) submitBtn.style.display = 'inline-flex';
-        if (nextBtn)   nextBtn.style.display   = 'none';
+        document.getElementById('question-text').textContent = q.question;
 
-        // Remove old explanation
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
+        q.options.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.className     = 'option-button';
+            btn.dataset.index = i;
+            btn.innerHTML     = `
+                <div class="option-content">
+                    <span class="option-letter">${String.fromCharCode(65 + i)}</span>
+                    <span class="option-text">${opt}</span>
+                </div>`;
+            container.appendChild(btn);
+        });
+
+        this.selectedAnswer = null;
+        document.getElementById('submit-answer').style.display = 'inline-flex';
+        document.getElementById('next-question').style.display = 'none';
         document.querySelector('.explanation')?.remove();
 
-        // Start countdown
         this.startTimer();
     }
 
-    // ── Answer handling ────────────────────────────────────────
     selectAnswer(btn) {
         document.querySelectorAll('.option-button').forEach(o => o.classList.remove('selected'));
         btn.classList.add('selected');
@@ -189,11 +224,9 @@ class PCSQuizApp {
             this.showNotification('Please select an answer before submitting!', 'warning');
             return;
         }
-
         clearInterval(this.timer);
         const q = this.quizQuestions[this.currentQuestion];
 
-        // Mark answers
         document.querySelectorAll('.option-button').forEach((btn, i) => {
             btn.disabled = true;
             if (i === q.correct) {
@@ -216,7 +249,6 @@ class PCSQuizApp {
         else           {               this.showNotification('Incorrect. Learn from this! 📚', 'error'); }
 
         this.showExplanation(q.explanation, isCorrect);
-
         document.getElementById('submit-answer').style.display = 'none';
         document.getElementById('next-question').style.display = 'inline-flex';
     }
@@ -230,18 +262,19 @@ class PCSQuizApp {
 
     showExplanation(text, isCorrect) {
         const div = document.createElement('div');
-        div.className = `explanation ${isCorrect ? 'correct' : 'incorrect'}`;
-        div.style.opacity   = '0';
-        div.style.transform = 'translateY(10px)';
-        div.style.transition = 'opacity .3s, transform .3s';
-        div.innerHTML = `
+        div.className   = `explanation ${isCorrect ? 'correct' : 'incorrect'}`;
+        div.style.cssText = 'opacity:0; transform:translateY(10px); transition:opacity .3s, transform .3s;';
+        div.innerHTML   = `
             <div class="explanation-header">
                 <span class="explanation-icon">${isCorrect ? '✓' : '✗'}</span>
                 <span class="explanation-status">${isCorrect ? 'Correct!' : 'Incorrect'}</span>
             </div>
             <div class="explanation-text">${text}</div>`;
         document.querySelector('.question-card')?.appendChild(div);
-        requestAnimationFrame(() => { div.style.opacity = '1'; div.style.transform = 'translateY(0)'; });
+        requestAnimationFrame(() => {
+            div.style.opacity   = '1';
+            div.style.transform = 'translateY(0)';
+        });
     }
 
     nextQuestion() {
@@ -256,26 +289,25 @@ class PCSQuizApp {
 
     updateProgressBar() {
         const fill = document.getElementById('progress-fill');
-        if (fill) fill.style.width = `${((this.currentQuestion + 1) / this.quizQuestions.length) * 100}%`;
+        if (fill) fill.style.width =
+            `${((this.currentQuestion + 1) / this.quizQuestions.length) * 100}%`;
     }
 
     // ── Results ────────────────────────────────────────────────
     showResults() {
+        clearInterval(this.timer);
         const pct    = Math.round((this.score / this.quizQuestions.length) * 100);
         const levels = [
-            { min:90, msg:'Outstanding! Exceptional performance!',  emoji:'🏆' },
-            { min:80, msg:'Excellent work! Great job!',             emoji:'🎉' },
-            { min:70, msg:'Good job! Keep up the good work!',       emoji:'👍' },
+            { min:90, msg:'Outstanding! Exceptional performance!',   emoji:'🏆' },
+            { min:80, msg:'Excellent work! Great job!',              emoji:'🎉' },
+            { min:70, msg:'Good job! Keep up the good work!',        emoji:'👍' },
             { min:60, msg:'Fair performance. More practice needed.', emoji:'📚' },
-            { min:0,  msg:'Keep studying and try again!',           emoji:'💪' }
+            { min:0,  msg:'Keep studying and try again!',            emoji:'💪' }
         ];
         const { msg, emoji } = levels.find(l => pct >= l.min);
         const stats = this.calculateCategoryStats();
 
-        const wrapper = document.querySelector('.quiz-wrapper');
-        if (!wrapper) return;
-
-        wrapper.innerHTML = `
+        document.querySelector('.quiz-wrapper').innerHTML = `
             <div class="results-container">
                 <div class="results-header">
                     <h1 class="results-title">Quiz Complete! ${emoji}</h1>
@@ -286,7 +318,6 @@ class PCSQuizApp {
                         </div>
                     </div>
                 </div>
-
                 <div class="results-summary">
                     <div class="summary-item">
                         <span class="summary-number">${this.score}</span>
@@ -301,9 +332,7 @@ class PCSQuizApp {
                         <span class="summary-label">Total</span>
                     </div>
                 </div>
-
                 <div class="results-message"><h3>${msg}</h3></div>
-
                 <div class="category-performance">
                     <h3>Performance by Category</h3>
                     <div class="category-stats">
@@ -317,7 +346,6 @@ class PCSQuizApp {
                             </div>`).join('')}
                     </div>
                 </div>
-
                 <div class="results-actions">
                     <button onclick="quizApp.startQuiz()" class="super-btn primary large">
                         <span class="btn-icon">🔄</span> Take Quiz Again
@@ -346,17 +374,18 @@ class PCSQuizApp {
     startTimer() {
         clearInterval(this.timer);
         this.timeLeft = 30;
-
         const timerText = document.getElementById('timer');
         const timerProg = document.getElementById('timer-progress');
 
         this.timer = setInterval(() => {
             this.timeLeft--;
-
             if (timerText) timerText.textContent = this.timeLeft;
-            if (timerProg) timerProg.style.strokeDashoffset = 100 - (this.timeLeft / 30) * 100;
+            if (timerProg) timerProg.style.strokeDashoffset =
+                100 - (this.timeLeft / 30) * 100;
 
-            const color = this.timeLeft <= 5 ? '#f44336' : this.timeLeft <= 10 ? '#ff9800' : '#29b6f6';
+            const color = this.timeLeft <= 5 ? '#f44336'
+                        : this.timeLeft <= 10 ? '#ff9800'
+                        : '#29b6f6';
             if (timerText) timerText.style.color  = color;
             if (timerProg) timerProg.style.stroke  = color;
 
@@ -374,14 +403,12 @@ class PCSQuizApp {
 
     // ── Notifications ──────────────────────────────────────────
     showNotification(message, type = 'info') {
-        document.querySelectorAll('.notification').forEach(n => n.remove());
+        document.querySelectorAll('.pcs-notification').forEach(n => n.remove());
         const n = document.createElement('div');
-        n.className = `notification notification-${type}`;
+        n.className = `pcs-notification pcs-notification-${type}`;
         n.innerHTML = `
-            <div class="notification-content">
-                <span>${message}</span>
-                <button onclick="this.closest('.notification').remove()">×</button>
-            </div>`;
+            <span>${message}</span>
+            <button onclick="this.parentElement.remove()">×</button>`;
         document.body.appendChild(n);
         setTimeout(() => {
             if (n.parentElement) { n.style.opacity = '0'; setTimeout(() => n.remove(), 300); }
@@ -409,64 +436,132 @@ class PCSQuizApp {
         return arr;
     }
 
-    // ── Inject all dynamic CSS once ────────────────────────────
+    // ── Dynamic CSS ────────────────────────────────────────────
     injectStyles() {
-        if (document.getElementById('pcs-quiz-styles')) return;
+        if (document.getElementById('pcs-dynamic-styles')) return;
         const s = document.createElement('style');
-        s.id = 'pcs-quiz-styles';
+        s.id = 'pcs-dynamic-styles';
         s.textContent = `
-            /* ── Animations ── */
-            @keyframes buttonRipple { to { transform:scale(2); opacity:0; } }
+            /* Animations */
+            @keyframes btnRipple   { to { transform:scale(2.5); opacity:0; } }
             @keyframes slideInRight { from { transform:translateX(110%); opacity:0; } to { transform:translateX(0); opacity:1; } }
 
-            /* ── Notifications ── */
-            .notification {
+            /* Notifications */
+            .pcs-notification {
                 position:fixed; top:20px; right:20px; z-index:10000;
-                max-width:380px; padding:.9rem 1.1rem; border-radius:12px;
-                box-shadow:0 8px 24px rgba(0,0,0,.18);
-                animation:slideInRight .3s ease-out;
-                transition:opacity .3s;
+                display:flex; align-items:center; gap:1rem;
+                max-width:380px; padding:.85rem 1.1rem;
+                border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,.18);
+                animation:slideInRight .3s ease-out; transition:opacity .3s;
+                font-size:.95rem; font-weight:500;
             }
-            .notification-success { background:#4caf50; color:#fff; }
-            .notification-error   { background:#f44336; color:#fff; }
-            .notification-warning { background:#ff9800; color:#fff; }
-            .notification-info    { background:#29b6f6; color:#fff; }
-            .notification-content { display:flex; align-items:center; justify-content:space-between; gap:.8rem; }
-            .notification-content button { background:none; border:none; color:inherit; font-size:1.4rem; line-height:1; cursor:pointer; opacity:.75; }
-            .notification-content button:hover { opacity:1; }
+            .pcs-notification button {
+                background:none; border:none; color:inherit;
+                font-size:1.3rem; line-height:1; cursor:pointer; opacity:.7; margin-left:auto;
+            }
+            .pcs-notification button:hover { opacity:1; }
+            .pcs-notification-success { background:#4caf50; color:#fff; }
+            .pcs-notification-error   { background:#f44336; color:#fff; }
+            .pcs-notification-warning { background:#ff9800; color:#fff; }
+            .pcs-notification-info    { background:#29b6f6; color:#fff; }
 
-            /* ── Results ── */
-            .results-container { max-width:600px; margin:0 auto; padding:2rem; text-align:center; background:#fff; border-radius:20px; box-shadow:0 20px 40px rgba(41,182,246,.15); }
-            .results-title { font-size:2rem; color:var(--primary,#29b6f6); margin-bottom:1.5rem; }
-            .results-score-circle { width:150px; height:150px; margin:0 auto; border-radius:50%; background:linear-gradient(135deg,var(--primary,#29b6f6),#0288d1); display:flex; align-items:center; justify-content:center; box-shadow:0 10px 30px rgba(41,182,246,.3); }
-            .score-circle-inner   { color:#fff; text-align:center; }
-            .score-percentage     { display:block; font-size:2.5rem; font-weight:800; }
-            .score-label          { font-size:.95rem; opacity:.9; text-transform:uppercase; letter-spacing:.06em; }
-            .results-summary      { display:flex; justify-content:space-around; margin:2rem 0; padding:1.4rem; background:#f0f9ff; border-radius:14px; }
-            .summary-number       { display:block; font-size:1.8rem; font-weight:700; color:var(--primary,#29b6f6); }
-            .summary-label        { font-size:.85rem; color:#666; text-transform:uppercase; letter-spacing:.04em; }
-            .results-message      { margin:1.5rem 0; padding:1rem 1.2rem; border-left:4px solid var(--primary,#29b6f6); border-radius:0 10px 10px 0; background:#fafeff; }
-            .results-message h3   { color:var(--primary,#29b6f6); margin:0; }
-            .category-performance          { margin:1.5rem 0; text-align:left; }
-            .category-performance > h3     { text-align:center; color:var(--primary,#29b6f6); margin-bottom:1rem; }
-            .category-stats                { display:flex; flex-direction:column; gap:.85rem; }
-            .category-stat-item            { display:flex; align-items:center; gap:.8rem; }
-            .category-name                 { min-width:130px; font-weight:600; font-size:.88rem; }
-            .category-bar                  { flex:1; height:8px; background:#e0e0e0; border-radius:4px; overflow:hidden; }
-            .category-fill                 { height:100%; background:var(--primary,#29b6f6); transition:width 1s ease-in-out; }
-            .category-percentage           { min-width:42px; text-align:right; font-weight:600; color:var(--primary,#29b6f6); font-size:.88rem; }
-            .results-actions               { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-top:2rem; }
+            /* Option content layout */
+            .option-content {
+                display:flex; align-items:center; gap:1rem;
+            }
+            .option-letter {
+                display:flex; align-items:center; justify-content:center;
+                width:32px; height:32px; min-width:32px;
+                background:rgba(41,182,246,.12); color:#29b6f6;
+                border-radius:50%; font-weight:700; font-size:.9rem;
+                transition:.15s;
+            }
+            .option-button.selected .option-letter,
+            .option-button.correct  .option-letter,
+            .option-button.incorrect .option-letter {
+                background:rgba(255,255,255,.25); color:#fff;
+            }
+            .option-text { flex:1; }
+
+            /* Answer indicator */
+            .answer-indicator {
+                position:absolute; right:1rem; top:50%; transform:translateY(-50%);
+                width:28px; height:28px; border-radius:50%;
+                display:flex; align-items:center; justify-content:center;
+                font-weight:700; font-size:1rem;
+            }
+            .answer-indicator.correct   { background:rgba(255,255,255,.3); color:#fff; }
+            .answer-indicator.incorrect { background:rgba(255,255,255,.3); color:#fff; }
+
+            /* Explanation */
+            .explanation {
+                margin-top:1.5rem; padding:1.25rem 1.5rem;
+                border-radius:12px; border-left:4px solid;
+            }
+            .explanation.correct   { background:#e8f5e9; border-color:#4caf50; }
+            .explanation.incorrect { background:#ffebee; border-color:#f44336; }
+            .explanation-header {
+                display:flex; align-items:center; gap:.5rem;
+                font-weight:700; margin-bottom:.5rem; font-size:1.05rem;
+            }
+            .explanation.correct   .explanation-header { color:#2e7d32; }
+            .explanation.incorrect .explanation-header { color:#c62828; }
+            .explanation-text { color:#555; line-height:1.6; font-size:.95rem; }
+
+            /* Difficulty badges */
+            .question-difficulty.easy   { background:#e8f5e9; color:#2e7d32; }
+            .question-difficulty.medium { background:#fff3e0; color:#e65100; }
+            .question-difficulty.hard   { background:#ffebee; color:#c62828; }
+
+            /* Results */
+            .results-container {
+                max-width:600px; margin:2rem auto; padding:2rem; text-align:center;
+                background:#fff; border-radius:20px;
+                box-shadow:0 20px 40px rgba(41,182,246,.15);
+                border:1px solid #e0f2fe;
+            }
+            .results-title { font-size:2rem; color:#29b6f6; margin-bottom:1.5rem; }
+            .results-score-circle {
+                width:150px; height:150px; margin:0 auto 1.5rem;
+                border-radius:50%; background:linear-gradient(135deg,#29b6f6,#0288d1);
+                display:flex; align-items:center; justify-content:center;
+                box-shadow:0 10px 30px rgba(41,182,246,.35);
+            }
+            .score-circle-inner { color:#fff; text-align:center; }
+            .score-percentage { display:block; font-size:2.5rem; font-weight:800; }
+            .score-label { font-size:.9rem; opacity:.9; text-transform:uppercase; letter-spacing:.06em; }
+            .results-summary {
+                display:flex; justify-content:space-around; margin:1.5rem 0;
+                padding:1.4rem; background:#f0f9ff; border-radius:14px;
+            }
+            .summary-number { display:block; font-size:1.8rem; font-weight:700; color:#29b6f6; }
+            .summary-label  { font-size:.85rem; color:#666; text-transform:uppercase; }
+            .results-message {
+                margin:1.5rem 0; padding:1rem 1.25rem;
+                border-left:4px solid #29b6f6; border-radius:0 10px 10px 0;
+                background:#f9feff; text-align:left;
+            }
+            .results-message h3 { color:#29b6f6; margin:0; }
+            .category-performance { margin:1.5rem 0; text-align:left; }
+            .category-performance > h3 { text-align:center; color:#29b6f6; margin-bottom:1rem; }
+            .category-stats { display:flex; flex-direction:column; gap:.8rem; }
+            .category-stat-item { display:flex; align-items:center; gap:.75rem; }
+            .category-name { min-width:130px; font-weight:600; font-size:.88rem; }
+            .category-bar  { flex:1; height:8px; background:#e0e0e0; border-radius:4px; overflow:hidden; }
+            .category-fill { height:100%; background:#29b6f6; transition:width 1s ease-in-out; }
+            .category-percentage { min-width:42px; text-align:right; font-weight:600; color:#29b6f6; font-size:.88rem; }
+            .results-actions { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-top:2rem; }
         `;
         document.head.appendChild(s);
     }
 }
 
-// ── Global helper called by HTML onclick attributes ─────────
+// ── Global helper (used by HTML onclick="showScreen(...)") ──
 function showScreen(screenId) {
     window.quizApp?.showScreen(screenId);
 }
 
-// ── Boot on DOMContentLoaded ────────────────────────────────
+// ── Boot ────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
     window.quizApp = new PCSQuizApp();
 
@@ -480,47 +575,46 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Mark body as fully loaded
     window.addEventListener('load', () => document.body.classList.add('loaded'));
 
-    // Lazy-load images with data-src
+    // Lazy-load images
     if ('IntersectionObserver' in window) {
         const io = new IntersectionObserver((entries, obs) => {
-            entries.forEach(({ isIntersecting, target }) => {
-                if (isIntersecting && target.dataset.src) {
-                    target.src = target.dataset.src;
-                    target.removeAttribute('data-src');
-                    obs.unobserve(target);
+            entries.forEach(({ isIntersecting, target: img }) => {
+                if (isIntersecting && img.dataset.src) {
+                    img.src = img.dataset.src;
+                    img.removeAttribute('data-src');
+                    obs.unobserve(img);
                 }
             });
         });
         document.querySelectorAll('img[data-src]').forEach(img => io.observe(img));
     }
 
-    // Card hover-lift
-    document.querySelectorAll('.feature-card, .question-card, .contact-method').forEach(card => {
+    // Card hover lift
+    document.querySelectorAll('.feature-card, .contact-method').forEach(card => {
         card.addEventListener('mouseenter', () => { card.style.transform = 'translateY(-5px)'; });
-        card.addEventListener('mouseleave', () => { card.style.transform = 'translateY(0)'; });
+        card.addEventListener('mouseleave', () => { card.style.transform = ''; });
     });
 
     // Button ripple
-    document.querySelectorAll('.super-btn, .option-button').forEach(btn => {
-        btn.addEventListener('click', function (e) {
-            const r    = document.createElement('div');
-            const rect = this.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            r.style.cssText = `
-                position:absolute; border-radius:50%; pointer-events:none;
-                width:${size}px; height:${size}px;
-                left:${e.clientX - rect.left - size/2}px;
-                top:${e.clientY - rect.top  - size/2}px;
-                background:rgba(255,255,255,.3);
-                transform:scale(0); animation:buttonRipple .6s linear;`;
-            this.style.position = 'relative';
-            this.style.overflow = 'hidden';
-            this.appendChild(r);
-            setTimeout(() => r.remove(), 600);
-        });
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.super-btn, .option-button');
+        if (!btn) return;
+        const r    = document.createElement('div');
+        const rect = btn.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        r.style.cssText = `
+            position:absolute; border-radius:50%; pointer-events:none;
+            width:${size}px; height:${size}px;
+            left:${e.clientX - rect.left - size/2}px;
+            top:${e.clientY - rect.top  - size/2}px;
+            background:rgba(255,255,255,.3);
+            transform:scale(0); animation:btnRipple .6s linear;`;
+        btn.style.position = 'relative';
+        btn.style.overflow = 'hidden';
+        btn.appendChild(r);
+        setTimeout(() => r.remove(), 600);
     });
 });
 
