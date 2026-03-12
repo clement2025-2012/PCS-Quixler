@@ -2,37 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>PCS Academy Quiz App - Educational Learning Platform</title>
     <meta name="description" content="Interactive educational quiz application by PCS Academy School. Test your knowledge in Math, Science, History and more.">
     <meta name="keywords" content="education, quiz, learning, PCS Academy, students, interactive">
     <meta name="author" content="PCS Academy School">
-    <meta property="og:title" content="PCS Academy Quiz App">
-    <meta property="og:description" content="Interactive educational quiz application by PCS Academy School with beautiful sky blue design">
-    <meta property="og:type" content="website">
-    <link rel="stylesheet" href="style.css">
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0ea5e9">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <!-- Google AdSense -->
+    
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5236839570529719" crossorigin="anonymous"></script>
+    
+    <script async="async" data-cfasync="false" src="https://pl28899645.effectivegatecpm.com/405a8cc9d2398da2a19a192e726a8865/invoke.js"></script>
+
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div id="app">
 
-    <!-- ══════════════════════════════════════════ -->
-    <!-- SPLASH SCREEN                              -->
-    <!-- ══════════════════════════════════════════ -->
     <div id="splash-screen" class="screen active">
         <div class="floating-particles">
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
+            <div class="particle"></div><div class="particle"></div>
+            <div class="particle"></div><div class="particle"></div>
             <div class="particle"></div>
         </div>
         <div class="splash-container">
             <div class="splash-logo-wrapper">
                 <div class="logo-glow"></div>
-                <img src="PCS-Seal.jpg" alt="PCS Academy Logo" class="splash-logo">
+                <img src="PCS-Seal.jpg" alt="PCS Academy Logo" class="splash-logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'140\' height=\'140\'><rect width=\'140\' height=\'140\' fill=\'%230ea5e9\'/><text x=\'50%\' y=\'50%\' fill=\'white\' font-size=\'60\' text-anchor=\'middle\' dominant-baseline=\'middle\'>🎓</text></svg>'">
             </div>
             <div class="splash-content">
                 <h1 class="splash-title">PCS Quixler</h1>
@@ -40,599 +38,235 @@
                 <span class="splash-tagline">✨ Learn • Quiz • Excel ✨</span>
             </div>
             <div class="loading-container">
-                <div class="loading-bar">
-                    <div class="loading-progress"></div>
-                </div>
-                <p class="loading-text">Loading your learning experience...</p>
+                <div class="loading-bar"><div class="loading-progress"></div></div>
+                <p class="loading-text">Loading your premium learning experience...</p>
             </div>
         </div>
     </div>
 
-    <!-- ══════════════════════════════════════════ -->
-    <!-- HOME SCREEN                                -->
-    <!-- ══════════════════════════════════════════ -->
-    <div id="home-screen" class="screen">
-
+    <div id="main-ui" style="display: none;">
         <header class="super-header">
             <div class="header-container">
                 <div class="logo-section">
-                    <img src="PCS-Seal.jpg" alt="PCS Academy" class="header-logo">
+                    <img src="PCS-Seal.jpg" alt="PCS Academy" class="header-logo" onerror="this.style.display='none'">
                     <div class="logo-text">
                         <h1 class="brand-name">PCS Quixler</h1>
-                        <span class="brand-tagline">Interactive Learning Platform</span>
+                        <span class="brand-tagline">Interactive Platform</span>
                     </div>
                 </div>
-                <nav class="super-nav">
-                    <a href="#" onclick="showScreen('home-screen')" class="nav-item"><span class="nav-icon">🏠</span> Home</a>
-                    <a href="#" onclick="showScreen('about-screen')" class="nav-item"><span class="nav-icon">ℹ️</span> About</a>
-                    <a href="#" onclick="showScreen('contact-screen')" class="nav-item"><span class="nav-icon">📞</span> Contact</a>
-                    <a href="#" onclick="showScreen('privacy-screen')" class="nav-item"><span class="nav-icon">🔒</span> Privacy</a>
-                    <a href="#" onclick="showScreen('terms-screen')" class="nav-item"><span class="nav-icon">📋</span> Terms</a>
-                </nav>
+                <div class="header-actions">
+                    <button id="theme-toggle" class="icon-btn" title="Toggle Dark Mode">🌙</button>
+                </div>
             </div>
+            
+            <nav class="super-nav">
+                <a href="#" onclick="showScreen('home-screen')" class="nav-item active" id="nav-home"><span class="nav-icon">🏠</span> Home</a>
+                <a href="#" onclick="showScreen('quiz-screen')" class="nav-item" id="nav-quiz"><span class="nav-icon">🚀</span> Play Quiz</a>
+                <a href="#" onclick="showScreen('about-screen')" class="nav-item" id="nav-about"><span class="nav-icon">ℹ️</span> About Us</a>
+                <a href="#" onclick="showScreen('contact-screen')" class="nav-item" id="nav-contact"><span class="nav-icon">📞</span> Contact</a>
+                <a href="#" onclick="showScreen('privacy-screen')" class="nav-item" id="nav-privacy"><span class="nav-icon">🔒</span> Privacy</a>
+                <a href="#" onclick="showScreen('terms-screen')" class="nav-item" id="nav-terms"><span class="nav-icon">📋</span> Terms</a>
+            </nav>
         </header>
 
-        <main class="home-main">
+        <div id="home-screen" class="screen">
+            <main class="home-main">
 
-            <!-- Hero -->
-            <section class="super-hero">
-                <div class="hero-background"></div>
-                <div class="hero-pattern"></div>
-                <div class="floating-shapes">
-                    <div class="shape shape-1"></div>
-                    <div class="shape shape-2"></div>
-                    <div class="shape shape-3"></div>
-                </div>
-                <div class="hero-content">
-                    <div class="hero-badge">🎓 PCS Academy School — Est. 2022</div>
-                    <h2 class="hero-title">Master Every <span class="highlight">Subject</span></h2>
-                    <p class="hero-subtitle">Interactive Learning Platform</p>
-                    <p class="hero-description">Discover the joy of learning with our comprehensive quiz platform. Test your knowledge, track progress, and excel in Mathematics, Science, History, English and more!</p>
-                    <div class="hero-actions">
-                        <button onclick="showScreen('quiz-screen')" class="super-btn primary large">
-                            <span class="btn-icon">🚀</span> Start Quiz Now
-                        </button>
-                        <button onclick="showScreen('about-screen')" class="super-btn secondary large">
-                            <span class="btn-icon">📖</span> Learn More
-                        </button>
+                <section class="super-hero">
+                    <div class="hero-background"></div>
+                    <div class="hero-pattern"></div>
+                    <div class="floating-shapes">
+                        <div class="shape shape-1"></div><div class="shape shape-2"></div><div class="shape shape-3"></div>
                     </div>
-                    <div class="hero-stats">
-                        <div class="stat-item"><span class="stat-number">20+</span><span class="stat-label">Questions</span></div>
-                        <div class="stat-item"><span class="stat-number">5</span><span class="stat-label">Subjects</span></div>
-                        <div class="stat-item"><span class="stat-number">100%</span><span class="stat-label">Free</span></div>
-                        <div class="stat-item"><span class="stat-number">∞</span><span class="stat-label">Learning</span></div>
+                    <div class="hero-content">
+                        <div class="hero-badge">🎓 PCS Academy School — Est. 2022</div>
+                        <h2 class="hero-title">Master Every <span class="highlight">Subject</span></h2>
+                        <p class="hero-subtitle">Interactive Learning Platform</p>
+                        <p class="hero-description">Discover the joy of learning with our comprehensive quiz platform. Test your knowledge, track progress, and excel in Mathematics, Science, History, English and more!</p>
+                        
+                        <div class="hero-actions">
+                            <button onclick="showScreen('quiz-screen')" class="super-btn primary large shadow-glow">
+                                <span class="btn-icon">🚀</span> Start Quiz Now
+                            </button>
+                            
+                            <a href="https://www.effectivegatecpm.com/h4acaqe6?key=4d984694b18d8e6d5e26145d1ac8a80f" target="_blank" class="super-btn warning large glow-pulse" style="text-decoration: none;">
+                                <span class="btn-icon">🎁</span> Claim Bonus Materials
+                            </a>
+                        </div>
+                        
+                        <div class="hero-stats">
+                            <div class="stat-item"><span class="stat-number">40+</span><span class="stat-label">Questions</span></div>
+                            <div class="stat-item"><span class="stat-number">5</span><span class="stat-label">Subjects</span></div>
+                            <div class="stat-item"><span class="stat-number" id="user-score-display">0</span><span class="stat-label">Total Score</span></div>
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            <!-- Autorelaxed Ad (hero → features) -->
-            <div class="adsense-container" id="adsense-container">
-                <ins class="adsbygoogle"
-                     id="pcs-ad-slot"
-                     style="display:block; width:100%; min-width:300px;"
-                     data-ad-format="autorelaxed"
-                     data-ad-client="ca-pub-5236839570529719"
-                     data-ad-slot="2726471037"></ins>
+                <div class="ads-wrapper">
+                    <div class="adsense-container" id="adsense-container">
+                        <span class="ad-label">SPONSORED (ADSENSE)</span>
+                        <ins class="adsbygoogle"
+                             style="display:block; width:100%; min-width:300px;"
+                             data-ad-format="autorelaxed"
+                             data-ad-client="ca-pub-5236839570529719"
+                             data-ad-slot="2726471037"></ins>
+                    </div>
+
+                    <div class="adsterra-native-container mt-4">
+                        <span class="ad-label text-primary">PREMIUM PARTNERS (ADSTERRA)</span>
+                        <div id="container-405a8cc9d2398da2a19a192e726a8865"></div>
+                    </div>
+                </div>
+
+                <section class="super-features">
+                    <div class="container">
+                        <div class="section-header">
+                            <h2 class="section-title">📚 Explore Our Subjects</h2>
+                            <p class="section-subtitle">Choose from our comprehensive range of subjects designed for interactive learning</p>
+                        </div>
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <span class="card-icon floating-icon">🔢</span>
+                                <h3 class="card-title">Mathematics</h3>
+                                <p class="card-description">Sharpen your numerical skills with arithmetic, algebra, geometry, and problem-solving challenges tailored for all levels.</p>
+                            </div>
+                            <div class="feature-card">
+                                <span class="card-icon floating-icon">🔬</span>
+                                <h3 class="card-title">Science</h3>
+                                <p class="card-description">Explore Physics, Chemistry, Biology, and Earth Science through engaging interactive questions.</p>
+                            </div>
+                            <div class="feature-card">
+                                <span class="card-icon floating-icon">📜</span>
+                                <h3 class="card-title">History</h3>
+                                <p class="card-description">Journey through Indian history, world events, and significant milestones that shaped our civilisation.</p>
+                            </div>
+                            <div class="feature-card">
+                                <span class="card-icon floating-icon">🌍</span>
+                                <h3 class="card-title">General Knowledge</h3>
+                                <p class="card-description">Broaden your horizons with world geography, current affairs, famous personalities, and more.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="display-ad-container">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-5236839570529719"
+                         data-ad-slot="1768612586"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                </div>
+
+            </main>
+        </div><div id="quiz-screen" class="screen">
+            <div class="quiz-wrapper" id="quiz-dom-wrapper">
+                </div>
+            
+            <div class="adsterra-banner-container mt-4">
+                <span class="ad-label" style="text-align: center; display: block; margin-bottom: 5px;">ADVERTISEMENT</span>
+                <div style="overflow-x: auto; width: 100%; display: flex; justify-content: center;">
+                    <script>
+                      atOptions = {
+                        'key' : '7806cf69b32226444d1d0682a47fd7c1',
+                        'format' : 'iframe',
+                        'height' : 90,
+                        'width' : 728,
+                        'params' : {}
+                      };
+                    </script>
+                    <script src="https://www.highperformanceformat.com/7806cf69b32226444d1d0682a47fd7c1/invoke.js"></script>
+                </div>
             </div>
+        </div>
 
-            <!-- Features Grid -->
-            <section class="super-features">
-                <div class="container">
-                    <div class="section-header">
-                        <h2 class="section-title">📚 Explore Our Subjects</h2>
-                        <p class="section-subtitle">Choose from our comprehensive range of subjects designed for interactive learning</p>
+        <div id="about-screen" class="screen">
+            <div class="page-wrapper">
+                <div class="page-header">
+                    <h1 class="page-title">About PCS Academy</h1>
+                    <p class="page-subtitle">Empowering students through quality education since 2022</p>
+                </div>
+                <div class="page-content p-4">
+                    <div class="about-hero mb-4">
+                        <img src="PCS-Seal.jpg" alt="PCS Academy" class="about-logo" onerror="this.style.display='none'">
+                        <div>
+                            <h2 class="content-title">PCS Academy School</h2>
+                            <p class="content-text">Established in 2022, located in Ambah, Madhya Pradesh, India. We are dedicated to providing quality education through innovative digital learning tools and interactive platforms.</p>
+                        </div>
                     </div>
-                    <div class="features-grid">
-                        <div class="feature-card">
-                            <span class="card-icon">🔢</span>
-                            <h3 class="card-title">Mathematics</h3>
-                            <p class="card-description">Sharpen your numerical skills with arithmetic, algebra, geometry, and problem-solving challenges tailored for all levels.</p>
-                            <div class="card-footer">
-                                <span class="question-count">📊 4+ Questions</span>
-                                <div class="difficulty-badges">
-                                    <span class="badge easy">Easy</span>
-                                    <span class="badge medium">Medium</span>
-                                </div>
-                            </div>
+                    <div class="content-section mb-4">
+                        <h2 class="section-title text-primary">🎯 Our Mission</h2>
+                        <p class="section-text">To make quality education accessible to every student through engaging digital tools, interactive learning experiences, and innovative teaching methodologies that inspire curiosity and foster academic excellence.</p>
+                    </div>
+                    <div class="content-section">
+                        <h2 class="section-title text-primary">👁️ Our Vision</h2>
+                        <p class="section-text">To become the leading educational platform in Madhya Pradesh, empowering students with knowledge, critical thinking skills, and the confidence to excel in academics and beyond.</p>
+                    </div>
+                </div>
+                
+                <div class="adsterra-banner-container mt-4">
+                    <script>atOptions={'key':'7806cf69b32226444d1d0682a47fd7c1','format':'iframe','height':90,'width':728,'params':{}};</script>
+                    <script src="https://www.highperformanceformat.com/7806cf69b32226444d1d0682a47fd7c1/invoke.js"></script>
+                </div>
+            </div>
+        </div>
+
+        <div id="contact-screen" class="screen">
+            <div class="page-wrapper">
+                <div class="page-header">
+                    <h1 class="page-title">Contact Us</h1>
+                    <p class="page-subtitle">We'd love to hear from you. Reach out anytime!</p>
+                </div>
+                <div class="page-content p-4">
+                    <div class="contact-grid">
+                        <div class="contact-item feature-card text-center">
+                            <span class="card-icon mb-2">📱</span>
+                            <h3 class="card-title">Phone</h3>
+                            <a href="tel:+919977365777" class="text-primary fw-bold block mt-2">+91 9977365777</a>
+                            <a href="tel:+918269950030" class="text-primary fw-bold block mt-2">+91 8269950030</a>
                         </div>
-                        <div class="feature-card">
-                            <span class="card-icon">🔬</span>
-                            <h3 class="card-title">Science</h3>
-                            <p class="card-description">Explore Physics, Chemistry, Biology, and Earth Science through engaging interactive questions.</p>
-                            <div class="card-footer">
-                                <span class="question-count">📊 5+ Questions</span>
-                                <div class="difficulty-badges">
-                                    <span class="badge easy">Easy</span>
-                                    <span class="badge medium">Medium</span>
-                                </div>
-                            </div>
+                        <div class="contact-item feature-card text-center">
+                            <span class="card-icon mb-2">✉️</span>
+                            <h3 class="card-title">Email</h3>
+                            <a href="mailto:pcsacademyschool@gmail.com" class="text-primary fw-bold block mt-2">pcsacademyschool@gmail.com</a>
                         </div>
-                        <div class="feature-card">
-                            <span class="card-icon">📜</span>
-                            <h3 class="card-title">History</h3>
-                            <p class="card-description">Journey through Indian history, world events, and significant milestones that shaped our civilisation.</p>
-                            <div class="card-footer">
-                                <span class="question-count">📊 4+ Questions</span>
-                                <div class="difficulty-badges">
-                                    <span class="badge easy">Easy</span>
-                                    <span class="badge medium">Medium</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="feature-card">
-                            <span class="card-icon">📝</span>
-                            <h3 class="card-title">English</h3>
-                            <p class="card-description">Enhance language skills with grammar, vocabulary, comprehension, and literary understanding exercises.</p>
-                            <div class="card-footer">
-                                <span class="question-count">📊 2+ Questions</span>
-                                <div class="difficulty-badges">
-                                    <span class="badge easy">Easy</span>
-                                    <span class="badge medium">Medium</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="feature-card">
-                            <span class="card-icon">🌍</span>
-                            <h3 class="card-title">General Knowledge</h3>
-                            <p class="card-description">Broaden your horizons with world geography, current affairs, famous personalities, and more.</p>
-                            <div class="card-footer">
-                                <span class="question-count">📊 4+ Questions</span>
-                                <div class="difficulty-badges">
-                                    <span class="badge easy">Easy</span>
-                                    <span class="badge medium">Medium</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="feature-card">
-                            <span class="card-icon">🏆</span>
-                            <h3 class="card-title">Start Quizzing!</h3>
-                            <p class="card-description">Ready to test your knowledge? Take our 10-question quiz with instant feedback and detailed explanations.</p>
-                            <div class="card-footer">
-                                <button onclick="showScreen('quiz-screen')" class="super-btn primary full-width">
-                                    <span class="btn-icon">🚀</span> Begin Quiz
-                                </button>
-                            </div>
+                        <div class="contact-item feature-card text-center">
+                            <span class="card-icon mb-2">📍</span>
+                            <h3 class="card-title">Location</h3>
+                            <p class="text-muted mt-2">Ambah, Madhya Pradesh, India</p>
                         </div>
                     </div>
                 </div>
-            </section>
-
-            <!-- Display Ad (above footer on home) -->
-            <div class="display-ad-container">
-                <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-5236839570529719"
-                     data-ad-slot="1768612586"
-                     data-ad-format="auto"
-                     data-full-width-responsive="true"></ins>
+                
+                <div class="display-ad-container mt-4">
+                    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5236839570529719" data-ad-slot="1768612586" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                </div>
             </div>
+        </div>
 
-        </main>
-
-        <footer class="super-footer">
+        <footer class="super-footer" id="global-footer" style="display:none;">
             <div class="footer-container">
                 <div class="footer-main">
                     <div class="footer-brand">
-                        <img src="PCS-Seal.jpg" alt="PCS Academy" class="footer-logo">
                         <div>
                             <h3 class="footer-brand-name">PCS Academy School</h3>
                             <p class="footer-tagline">Empowering students through interactive digital education.</p>
-                            <p class="footer-location">📍 Ambah, Madhya Pradesh, India</p>
-                        </div>
-                    </div>
-                    <div>
-                        <h4 class="footer-section-title">Quick Links</h4>
-                        <div class="link-grid">
-                            <a href="#" onclick="showScreen('home-screen')" class="footer-link">🏠 Home</a>
-                            <a href="#" onclick="showScreen('quiz-screen')" class="footer-link">🎯 Quiz</a>
-                            <a href="#" onclick="showScreen('about-screen')" class="footer-link">ℹ️ About</a>
-                            <a href="#" onclick="showScreen('contact-screen')" class="footer-link">📞 Contact</a>
-                            <a href="#" onclick="showScreen('privacy-screen')" class="footer-link">🔒 Privacy</a>
-                            <a href="#" onclick="showScreen('terms-screen')" class="footer-link">📋 Terms</a>
-                        </div>
-                    </div>
-                    <div>
-                        <h4 class="footer-section-title">Contact Us</h4>
-                        <div class="contact-methods">
-                            <a href="tel:+919977365777" class="contact-item">
-                                <span class="contact-icon">📱</span> +91 9977365777
-                            </a>
-                            <a href="tel:+918269950030" class="contact-item">
-                                <span class="contact-icon">📱</span> +91 8269950030
-                            </a>
-                            <a href="mailto:pcsacademyschool@gmail.com" class="contact-item">
-                                <span class="contact-icon">✉️</span> pcsacademyschool@gmail.com
-                            </a>
-                        </div>
-                    </div>
-                    <div>
-                        <h4 class="footer-section-title">Stay Updated</h4>
-                        <p style="color:var(--gray-400);font-size:0.9rem;margin-bottom:1rem;">Subscribe for new quiz content and updates.</p>
-                        <div class="newsletter-form">
-                            <input type="email" class="newsletter-input" placeholder="Your email address">
-                            <button class="newsletter-btn" type="button">Subscribe</button>
                         </div>
                     </div>
                 </div>
                 <div class="footer-bottom">
-                    <div class="footer-bottom-content">
-                        <p class="copyright">© 2024 PCS Academy School. All rights reserved. | Est. 2022, Ambah MP India</p>
-                        <div class="social-links">
-                            <a href="mailto:pcsacademyschool@gmail.com" class="social-link" title="Email">✉️</a>
-                            <a href="tel:+919977365777" class="social-link" title="Call">📞</a>
-                        </div>
+                    <div class="footer-bottom-content text-center">
+                        <p class="copyright">© 2026 PCS Academy School. All rights reserved. | Est. 2022, Ambah MP India</p>
                     </div>
                 </div>
             </div>
         </footer>
 
-    </div><!-- /#home-screen -->
-
-    <!-- ══════════════════════════════════════════ -->
-    <!-- QUIZ SCREEN                                -->
-    <!-- ══════════════════════════════════════════ -->
-    <div id="quiz-screen" class="screen">
-        <div class="quiz-wrapper">
-            <div class="quiz-header">
-                <button onclick="showScreen('home-screen')" class="super-back-btn">
-                    <span class="btn-icon">←</span> Back to Home
-                </button>
-                <div class="quiz-progress-info">
-                    <div class="question-indicator">
-                        <span id="question-counter" class="question-number">Question 1 of 10</span>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="progress-fill"></div>
-                        </div>
-                    </div>
-                    <div class="timer-container">
-                        <div class="timer-circle">
-                            <div class="timer-text" id="timer">30</div>
-                            <svg class="timer-svg" viewBox="0 0 36 36">
-                                <circle cx="18" cy="18" r="16" fill="none" stroke="#e0f2fe" stroke-width="2"/>
-                                <circle id="timer-progress" cx="18" cy="18" r="16" fill="none" stroke="#29b6f6" stroke-width="2" stroke-dasharray="100 100" stroke-dashoffset="0"/>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="quiz-content">
-                <div class="question-card">
-                    <div class="question-header">
-                        <span class="question-category" id="question-category">Mathematics</span>
-                        <span class="question-difficulty" id="question-difficulty">Easy</span>
-                    </div>
-                    <h2 id="question-text" class="question-title">Loading question...</h2>
-                </div>
-                <div class="options-grid" id="options-container"></div>
-                <div class="quiz-actions">
-                    <button id="submit-answer" class="super-btn primary large">
-                        <span class="btn-icon">✓</span> Submit Answer
-                    </button>
-                    <button id="next-question" class="super-btn primary large" style="display:none">
-                        <span class="btn-icon">→</span> Next Question
-                    </button>
-                </div>
-            </div>
-            <!-- Display Ad bottom of quiz -->
-            <div class="display-ad-container">
-                <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-5236839570529719"
-                     data-ad-slot="1768612586"
-                     data-ad-format="auto"
-                     data-full-width-responsive="true"></ins>
-            </div>
-        </div>
-    </div><!-- /#quiz-screen -->
-
-    <!-- ══════════════════════════════════════════ -->
-    <!-- ABOUT SCREEN                               -->
-    <!-- ══════════════════════════════════════════ -->
-    <div id="about-screen" class="screen">
-        <div class="page-wrapper">
-            <div class="page-header">
-                <button onclick="showScreen('home-screen')" class="super-back-btn">
-                    <span class="btn-icon">←</span> Back to Home
-                </button>
-                <div class="page-title-section">
-                    <h1 class="page-title">About PCS Academy</h1>
-                    <p class="page-subtitle">Empowering students through quality education since 2022</p>
-                </div>
-            </div>
-            <div class="page-content">
-                <div class="about-hero">
-                    <div class="about-image">
-                        <img src="PCS-Seal.jpg" alt="PCS Academy School" class="about-logo">
-                    </div>
-                    <div class="about-info">
-                        <h2 class="content-title">PCS Academy School</h2>
-                        <p class="content-text">PCS Academy School is a premier educational institution established in 2022, located in Ambah, Madhya Pradesh, India. We are dedicated to providing quality education through innovative digital learning tools and interactive platforms.</p>
-                    </div>
-                </div>
-                <div class="content-sections">
-                    <div class="content-section">
-                        <h2 class="section-title">🎯 Our Mission</h2>
-                        <p class="section-text">To make quality education accessible to every student through engaging digital tools, interactive learning experiences, and innovative teaching methodologies that inspire curiosity and foster academic excellence.</p>
-                    </div>
-                    <div class="content-section">
-                        <h2 class="section-title">👁️ Our Vision</h2>
-                        <p class="section-text">To become the leading educational platform in Madhya Pradesh, empowering students with knowledge, critical thinking skills, and the confidence to excel in academics and beyond.</p>
-                    </div>
-                    <div class="content-section">
-                        <h2 class="section-title">⭐ Why Choose Us</h2>
-                        <p class="section-text">Our interactive quiz platform covers Mathematics, Science, History, English, and General Knowledge with instant feedback, detailed explanations, and performance tracking to help students improve continuously.</p>
-                    </div>
-                    <div class="content-section contact-section">
-                        <h2 class="section-title">📞 Contact Information</h2>
-                        <div class="contact-grid">
-                            <div class="contact-item">
-                                <strong>📱 Phone</strong>
-                                <a href="tel:+919977365777">+91 9977365777</a><br>
-                                <a href="tel:+918269950030">+91 8269950030</a>
-                            </div>
-                            <div class="contact-item">
-                                <strong>✉️ Email</strong>
-                                <a href="mailto:pcsacademyschool@gmail.com">pcsacademyschool@gmail.com</a>
-                            </div>
-                            <div class="contact-item">
-                                <strong>📍 Address</strong>
-                                Ambah, Madhya Pradesh, India
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Display Ad bottom of about -->
-            <div class="display-ad-container">
-                <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-5236839570529719"
-                     data-ad-slot="1768612586"
-                     data-ad-format="auto"
-                     data-full-width-responsive="true"></ins>
-            </div>
-        </div>
-    </div><!-- /#about-screen -->
-
-    <!-- ══════════════════════════════════════════ -->
-    <!-- CONTACT SCREEN                             -->
-    <!-- ══════════════════════════════════════════ -->
-    <div id="contact-screen" class="screen">
-        <div class="page-wrapper">
-            <div class="page-header">
-                <button onclick="showScreen('home-screen')" class="super-back-btn">
-                    <span class="btn-icon">←</span> Back to Home
-                </button>
-                <div class="page-title-section">
-                    <h1 class="page-title">Contact Us</h1>
-                    <p class="page-subtitle">We'd love to hear from you. Reach out anytime!</p>
-                </div>
-            </div>
-            <div class="page-content">
-                <div class="contact-content">
-                    <div class="contact-info-section">
-                        <h2 class="section-title">📞 Contact Information</h2>
-                        <div class="contact-methods">
-                            <div class="contact-method">
-                                <span class="method-icon">📱</span>
-                                <div class="method-details">
-                                    <h3>Phone Numbers</h3>
-                                    <a href="tel:+919977365777" class="contact-link">+91 9977365777</a><br>
-                                    <a href="tel:+918269950030" class="contact-link">+91 8269950030</a>
-                                </div>
-                            </div>
-                            <div class="contact-method">
-                                <span class="method-icon">✉️</span>
-                                <div class="method-details">
-                                    <h3>Email Address</h3>
-                                    <a href="mailto:pcsacademyschool@gmail.com" class="contact-link">pcsacademyschool@gmail.com</a>
-                                </div>
-                            </div>
-                            <div class="contact-method">
-                                <span class="method-icon">📍</span>
-                                <div class="method-details">
-                                    <h3>Location</h3>
-                                    <p>Ambah, Madhya Pradesh, India</p>
-                                </div>
-                            </div>
-                            <div class="contact-method">
-                                <span class="method-icon">🕐</span>
-                                <div class="method-details">
-                                    <h3>School Hours</h3>
-                                    <p>Monday – Saturday: 8:00 AM – 4:00 PM</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="contact-form-section">
-                        <h2 class="section-title">💬 Send us a Message</h2>
-                        <form class="super-contact-form" id="contact-form" onsubmit="handleContactForm(event)">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="name" class="form-label">Full Name</label>
-                                    <input type="text" id="name" name="name" class="form-input" placeholder="Your full name" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="email" class="form-label">Email Address</label>
-                                    <input type="email" id="email" name="email" class="form-input" placeholder="your@email.com" required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="subject" class="form-label">Subject</label>
-                                <select id="subject" name="subject" class="form-select" required>
-                                    <option value="">Select a subject</option>
-                                    <option value="Admission Inquiry">🎓 Admission Inquiry</option>
-                                    <option value="Academic Support">📚 Academic Support</option>
-                                    <option value="Technical Issues">🔧 Technical Issues</option>
-                                    <option value="General Questions">❓ General Questions</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="message" class="form-label">Message</label>
-                                <textarea id="message" name="message" rows="5" class="form-textarea" placeholder="Tell us how we can help you..." required></textarea>
-                            </div>
-                            <button type="submit" class="super-btn primary large full-width">
-                                <span class="btn-icon">📤</span> Send Message
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <!-- Display Ad bottom of contact -->
-            <div class="display-ad-container">
-                <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-5236839570529719"
-                     data-ad-slot="1768612586"
-                     data-ad-format="auto"
-                     data-full-width-responsive="true"></ins>
-            </div>
-        </div>
-    </div><!-- /#contact-screen -->
-
-    <!-- ══════════════════════════════════════════ -->
-    <!-- PRIVACY SCREEN                             -->
-    <!-- ══════════════════════════════════════════ -->
-    <div id="privacy-screen" class="screen">
-        <div class="page-wrapper">
-            <div class="page-header">
-                <button onclick="showScreen('home-screen')" class="super-back-btn">
-                    <span class="btn-icon">←</span> Back to Home
-                </button>
-                <div class="page-title-section">
-                    <h1 class="page-title">Privacy Policy</h1>
-                    <p class="page-subtitle">How we protect and handle your information</p>
-                </div>
-            </div>
-            <div class="page-content">
-                <div class="policy-content">
-                    <div class="policy-meta">
-                        <strong>Last Updated:</strong> January 2024 &nbsp;|&nbsp;
-                        <strong>Effective Date:</strong> January 2024 &nbsp;|&nbsp;
-                        <strong>Institution:</strong> PCS Academy School, Ambah MP India
-                    </div>
-                    <div class="policy-sections">
-                        <section class="policy-section">
-                            <h2 class="policy-title">📋 Information We Collect</h2>
-                            <p class="policy-text">PCS Academy School collects minimal information necessary to provide our educational quiz services. We may collect usage data such as quiz scores and session information to improve learning experiences.</p>
-                            <ul class="policy-list">
-                                <li>Quiz performance data (scores, answers) stored locally on your device</li>
-                                <li>Contact form information when you voluntarily submit it</li>
-                                <li>General analytics data through Google AdSense to serve relevant advertisements</li>
-                            </ul>
-                        </section>
-                        <section class="policy-section">
-                            <h2 class="policy-title">🔒 How We Use Your Information</h2>
-                            <p class="policy-text">Information collected is used solely to improve the educational experience. We do not sell personal data to third parties.</p>
-                            <ul class="policy-list">
-                                <li>To provide and improve our educational quiz platform</li>
-                                <li>To respond to your inquiries and support requests</li>
-                                <li>To display relevant advertisements via Google AdSense</li>
-                            </ul>
-                        </section>
-                        <section class="policy-section">
-                            <h2 class="policy-title">🛡️ Data Security</h2>
-                            <p class="policy-text">We implement appropriate security measures. Quiz data is stored locally on your device and not transmitted to our servers. Contact form submissions are sent directly via your email client.</p>
-                        </section>
-                        <section class="policy-section">
-                            <h2 class="policy-title">🍪 Cookies &amp; Advertising</h2>
-                            <p class="policy-text">We use Google AdSense to display advertisements. Google may use cookies to serve ads based on prior visits. You can opt out at <a href="https://www.google.com/settings/ads" target="_blank" style="color:var(--primary)">Google Ad Settings</a>.</p>
-                        </section>
-                        <section class="policy-section">
-                            <h2 class="policy-title">📞 Contact</h2>
-                            <div class="contact-info">
-                                <p><strong>Email:</strong> <a href="mailto:pcsacademyschool@gmail.com">pcsacademyschool@gmail.com</a></p>
-                                <p><strong>Phone:</strong> +91 9977365777 / +91 8269950030</p>
-                                <p><strong>Address:</strong> Ambah, Madhya Pradesh, India</p>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-            </div>
-            <!-- Display Ad bottom of privacy -->
-            <div class="display-ad-container">
-                <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-5236839570529719"
-                     data-ad-slot="1768612586"
-                     data-ad-format="auto"
-                     data-full-width-responsive="true"></ins>
-            </div>
-        </div>
-    </div><!-- /#privacy-screen -->
-
-    <!-- ══════════════════════════════════════════ -->
-    <!-- TERMS SCREEN                               -->
-    <!-- ══════════════════════════════════════════ -->
-    <div id="terms-screen" class="screen">
-        <div class="page-wrapper">
-            <div class="page-header">
-                <button onclick="showScreen('home-screen')" class="super-back-btn">
-                    <span class="btn-icon">←</span> Back to Home
-                </button>
-                <div class="page-title-section">
-                    <h1 class="page-title">Terms of Service</h1>
-                    <p class="page-subtitle">Please read these terms carefully before using our platform</p>
-                </div>
-            </div>
-            <div class="page-content">
-                <div class="policy-content">
-                    <div class="policy-meta">
-                        <strong>Last Updated:</strong> January 2024 &nbsp;|&nbsp;
-                        <strong>Governing Law:</strong> Madhya Pradesh, India
-                    </div>
-                    <div class="policy-sections">
-                        <section class="policy-section">
-                            <h2 class="policy-title">✅ Acceptance of Terms</h2>
-                            <p class="policy-text">By accessing and using the PCS Academy Quiz platform, you accept and agree to be bound by these Terms of Service. If you do not agree, please discontinue use of the platform.</p>
-                        </section>
-                        <section class="policy-section">
-                            <h2 class="policy-title">🎓 Educational Use</h2>
-                            <p class="policy-text">This platform is designed exclusively for educational purposes. All quiz content, questions, and explanations are intended to support academic learning.</p>
-                        </section>
-                        <section class="policy-section">
-                            <h2 class="policy-title">👤 User Responsibilities</h2>
-                            <ul class="policy-list">
-                                <li>Provide accurate and truthful information when contacting us</li>
-                                <li>Use the platform responsibly, ethically, and in accordance with educational best practices</li>
-                                <li>Respect intellectual property rights of all educational content and materials</li>
-                                <li>Not attempt to hack, manipulate, or interfere with the normal operation of our systems</li>
-                                <li>Not share inappropriate, offensive, or harmful content through our platform</li>
-                                <li>Maintain the confidentiality of any account credentials and report unauthorized access</li>
-                            </ul>
-                        </section>
-                        <section class="policy-section">
-                            <h2 class="policy-title">📚 Intellectual Property</h2>
-                            <p class="policy-text">All content, including questions, explanations, educational materials, design elements, and software, is the exclusive property of PCS Academy School (Est. 2022) and is protected by copyright and intellectual property laws.</p>
-                        </section>
-                        <section class="policy-section">
-                            <h2 class="policy-title">⚖️ Governing Law</h2>
-                            <p class="policy-text">These terms are governed by the laws of Madhya Pradesh, India. Any disputes shall be subject to the jurisdiction of courts in Madhya Pradesh.</p>
-                        </section>
-                        <section class="policy-section">
-                            <h2 class="policy-title">📞 Contact Information</h2>
-                            <div class="contact-info">
-                                <p><strong>Email:</strong> <a href="mailto:pcsacademyschool@gmail.com">pcsacademyschool@gmail.com</a></p>
-                                <p><strong>Phone:</strong> +91 9977365777 / +91 8269950030</p>
-                                <p><strong>Address:</strong> Ambah, Madhya Pradesh, India</p>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-            </div>
-            <!-- Display Ad bottom of terms -->
-            <div class="display-ad-container">
-                <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-5236839570529719"
-                     data-ad-slot="1768612586"
-                     data-ad-format="auto"
-                     data-full-width-responsive="true"></ins>
-            </div>
-        </div>
-    </div><!-- /#terms-screen -->
-
-</div><!-- /#app -->
+    </div></div><script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script src="app.js"></script>
+
+<script src="https://pl28899643.effectivegatecpm.com/19/a7/42/19a742ccf1c7cf522921693b0c0eace1.js"></script>
+<script src="https://pl28899647.effectivegatecpm.com/14/10/55/141055dc26c12b790854f9c6541fc13e.js"></script>
+
 </body>
 </html>
