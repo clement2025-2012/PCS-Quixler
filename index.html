@@ -30,7 +30,7 @@
         <div class="splash-container">
             <div class="splash-logo-wrapper">
                 <div class="logo-glow"></div>
-                <img src="PCS-Seal.jpg" alt="PCS Academy Logo" class="splash-logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'140\' height=\'140\'><rect width=\'140\' height=\'140\' fill=\'%230ea5e9\'/><text x=\'50%\' y=\'50%\' fill=\'white\' font-size=\'60\' text-anchor=\'middle\' dominant-baseline=\'middle\'>🎓</text></svg>'">
+                <img src="PCS-Seal.jpg" alt="PCS Logo" class="splash-logo" onerror="this.outerHTML='<div class=\'splash-logo-placeholder\'>🎓</div>'">
             </div>
             <div class="splash-content">
                 <h1 class="splash-title">PCS Quixler</h1>
@@ -48,7 +48,7 @@
         <header class="super-header">
             <div class="header-container">
                 <div class="logo-section">
-                    <img src="PCS-Seal.jpg" alt="PCS Academy" class="header-logo" onerror="this.style.display='none'">
+                    <img src="PCS-Seal.jpg" alt="PCS" class="header-logo" onerror="this.outerHTML='<div class=\'header-logo-placeholder\'>🎓</div>'">
                     <div class="logo-text">
                         <h1 class="brand-name">PCS Quixler</h1>
                         <span class="brand-tagline">Interactive Platform</span>
@@ -113,7 +113,7 @@
                     </div>
 
                     <div class="adsterra-native-container mt-4">
-                        <span class="ad-label text-primary">PREMIUM PARTNERS (ADSTERRA)</span>
+                        <span class="ad-label text-primary">PREMIUM PARTNERS</span>
                         <div id="container-405a8cc9d2398da2a19a192e726a8865"></div>
                     </div>
                 </div>
@@ -159,21 +159,17 @@
                 </div>
 
             </main>
-        </div><div id="quiz-screen" class="screen">
-            <div class="quiz-wrapper" id="quiz-dom-wrapper">
+        </div>
+
+        <div id="quiz-screen" class="screen">
+            <div class="quiz-wrapper" id="quiz-wrapper-dom">
                 </div>
             
             <div class="adsterra-banner-container mt-4">
-                <span class="ad-label" style="text-align: center; display: block; margin-bottom: 5px;">ADVERTISEMENT</span>
+                <span class="ad-label">ADVERTISEMENT</span>
                 <div style="overflow-x: auto; width: 100%; display: flex; justify-content: center;">
                     <script>
-                      atOptions = {
-                        'key' : '7806cf69b32226444d1d0682a47fd7c1',
-                        'format' : 'iframe',
-                        'height' : 90,
-                        'width' : 728,
-                        'params' : {}
-                      };
+                      atOptions = { 'key' : '7806cf69b32226444d1d0682a47fd7c1', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
                     </script>
                     <script src="https://www.highperformanceformat.com/7806cf69b32226444d1d0682a47fd7c1/invoke.js"></script>
                 </div>
@@ -187,20 +183,13 @@
                     <p class="page-subtitle">Empowering students through quality education since 2022</p>
                 </div>
                 <div class="page-content p-4">
-                    <div class="about-hero mb-4">
-                        <img src="PCS-Seal.jpg" alt="PCS Academy" class="about-logo" onerror="this.style.display='none'">
-                        <div>
-                            <h2 class="content-title">PCS Academy School</h2>
-                            <p class="content-text">Established in 2022, located in Ambah, Madhya Pradesh, India. We are dedicated to providing quality education through innovative digital learning tools and interactive platforms.</p>
-                        </div>
-                    </div>
                     <div class="content-section mb-4">
                         <h2 class="section-title text-primary">🎯 Our Mission</h2>
-                        <p class="section-text">To make quality education accessible to every student through engaging digital tools, interactive learning experiences, and innovative teaching methodologies that inspire curiosity and foster academic excellence.</p>
+                        <p class="section-text">To make quality education accessible to every student through engaging digital tools and interactive learning experiences.</p>
                     </div>
                     <div class="content-section">
                         <h2 class="section-title text-primary">👁️ Our Vision</h2>
-                        <p class="section-text">To become the leading educational platform in Madhya Pradesh, empowering students with knowledge, critical thinking skills, and the confidence to excel in academics and beyond.</p>
+                        <p class="section-text">To become the leading educational platform in Madhya Pradesh, empowering students with knowledge and critical thinking skills.</p>
                     </div>
                 </div>
                 
@@ -230,16 +219,31 @@
                             <h3 class="card-title">Email</h3>
                             <a href="mailto:pcsacademyschool@gmail.com" class="text-primary fw-bold block mt-2">pcsacademyschool@gmail.com</a>
                         </div>
-                        <div class="contact-item feature-card text-center">
-                            <span class="card-icon mb-2">📍</span>
-                            <h3 class="card-title">Location</h3>
-                            <p class="text-muted mt-2">Ambah, Madhya Pradesh, India</p>
-                        </div>
                     </div>
                 </div>
-                
-                <div class="display-ad-container mt-4">
-                    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5236839570529719" data-ad-slot="1768612586" data-ad-format="auto" data-full-width-responsive="true"></ins>
+            </div>
+        </div>
+
+        <div id="privacy-screen" class="screen">
+            <div class="page-wrapper">
+                <div class="page-header"><h1 class="page-title">Privacy Policy</h1></div>
+                <div class="page-content p-4">
+                    <h2 class="section-title">📋 Information We Collect</h2>
+                    <p class="section-text mb-4">PCS Academy School collects minimal information necessary to provide our educational quiz services. Quiz performance data is stored locally on your device.</p>
+                    <h2 class="section-title">🍪 Cookies & Advertising</h2>
+                    <p class="section-text">We use Google AdSense and various premium ad partners to display advertisements to keep our platform free. These networks may use cookies to serve personalized ads based on your browser history.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="terms-screen" class="screen">
+            <div class="page-wrapper">
+                <div class="page-header"><h1 class="page-title">Terms of Service</h1></div>
+                <div class="page-content p-4">
+                    <h2 class="section-title">✅ Acceptance of Terms</h2>
+                    <p class="section-text mb-4">By accessing the PCS Academy Quiz platform, you agree to be bound by these Terms of Service. This platform is designed exclusively for educational purposes.</p>
+                    <h2 class="section-title">📚 Intellectual Property</h2>
+                    <p class="section-text">All content, including questions and educational materials, is the exclusive property of PCS Academy School (Est. 2022).</p>
                 </div>
             </div>
         </div>
@@ -266,7 +270,10 @@
 <script src="app.js"></script>
 
 <script src="https://pl28899643.effectivegatecpm.com/19/a7/42/19a742ccf1c7cf522921693b0c0eace1.js"></script>
+
 <script src="https://pl28899647.effectivegatecpm.com/14/10/55/141055dc26c12b790854f9c6541fc13e.js"></script>
+
+<script src="https://quge5.com/88/tag.min.js" data-zone="218936" async data-cfasync="false"></script>
 
 </body>
 </html>
