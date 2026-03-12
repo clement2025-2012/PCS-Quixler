@@ -1,7 +1,7 @@
 // ============================================================
-// PCS Academy Quiz Application — MASTER ENGINE v36.0
-// Features: Dark Mode, LocalStorage Tracking, 40+ Questions, 
-// Confetti Animation API, and Safe AdSense Pushing.
+// PCS Academy Quiz Application — MASTER ENGINE v42.0
+// Features: Dark Mode, LocalStorage Tracking, 42 Questions, 
+// Confetti Animation API, and Safe AdSense Hooks.
 // ============================================================
 
 class PCSQuizApp {
@@ -14,13 +14,13 @@ class PCSQuizApp {
         this.timer           = null;
         this.timeLeft        = 30;
         this.selectedAnswer  = null;
-        this.totalQuestions  = 10; // Number of questions per round
+        this.totalQuestions  = 10; // Serves 10 questions per run
         this.isDarkMode      = false;
         
         // Local Storage Tracking
         this.totalLifetimeScore = parseInt(localStorage.getItem('pcs_quixler_score')) || 0;
 
-        // Massive 40+ Question Database
+        // Massive 42-Question Database
         this.questionDB = [
             { id:1, category:'Mathematics', difficulty:'Easy', question:'What is 15 + 27?', options:['42','41','43','40'], correct:0, explanation:'15 + 27 = 42.' },
             { id:2, category:'Mathematics', difficulty:'Easy', question:'Square root of 144?', options:['11','12','13','14'], correct:1, explanation:'12 x 12 = 144.' },
@@ -61,7 +61,9 @@ class PCSQuizApp {
             { id:37, category:'Mathematics', difficulty:'Medium', question:'How many degrees in a circle?', options:['180','270','360','400'], correct:2, explanation:'A full circle has 360 degrees.' },
             { id:38, category:'History', difficulty:'Hard', question:'Who was the iron man of India?', options:['Bhagat Singh','Sardar Patel','Subhas Chandra Bose','Lala Lajpat Rai'], correct:1, explanation:'Sardar Vallabhbhai Patel.' },
             { id:39, category:'General Knowledge', difficulty:'Hard', question:'What is the capital of Australia?', options:['Sydney','Melbourne','Canberra','Perth'], correct:2, explanation:'Canberra is the capital.' },
-            { id:40, category:'Science', difficulty:'Medium', question:'Which planet is closest to the sun?', options:['Venus','Earth','Mars','Mercury'], correct:3, explanation:'Mercury is the closest planet.' }
+            { id:40, category:'Science', difficulty:'Medium', question:'Which planet is closest to the sun?', options:['Venus','Earth','Mars','Mercury'], correct:3, explanation:'Mercury is the closest planet.' },
+            { id:41, category:'Mathematics', difficulty:'Hard', question:'What is the value of 5 factorial (5!)?', options:['100','120','24','60'], correct:1, explanation:'5! = 5 x 4 x 3 x 2 x 1 = 120.' },
+            { id:42, category:'English', difficulty:'Medium', question:'Which is a vowel?', options:['B','C','D','E'], correct:3, explanation:'E is a vowel (A, E, I, O, U).' }
         ];
 
         this.init();
@@ -71,7 +73,8 @@ class PCSQuizApp {
         const self = this;
         
         // Setup Dark Mode toggle
-        document.getElementById('theme-toggle').addEventListener('click', () => this.toggleTheme());
+        const themeBtn = document.getElementById('theme-toggle');
+        if(themeBtn) themeBtn.addEventListener('click', () => this.toggleTheme());
         
         // Update Lifetime Score UI
         const scoreDisplay = document.getElementById('user-score-display');
@@ -97,12 +100,13 @@ class PCSQuizApp {
 
     toggleTheme() {
         this.isDarkMode = !this.isDarkMode;
+        const themeBtn = document.getElementById('theme-toggle');
         if(this.isDarkMode) {
             document.body.classList.add('dark-theme');
-            document.getElementById('theme-toggle').innerText = '☀️';
+            if(themeBtn) themeBtn.innerText = '☀️';
         } else {
             document.body.classList.remove('dark-theme');
-            document.getElementById('theme-toggle').innerText = '🌙';
+            if(themeBtn) themeBtn.innerText = '🌙';
         }
     }
 
@@ -133,7 +137,7 @@ class PCSQuizApp {
         this.currentQuestion = 0;
         this.score = 0;
         this.userAnswers = [];
-        // Randomly select X questions
+        // Randomly select 10 questions from the 42 question bank
         this.quizQuestions = this.questionDB.sort(() => 0.5 - Math.random()).slice(0, this.totalQuestions);
 
         const wrapper = document.getElementById('quiz-wrapper-dom');
@@ -231,7 +235,6 @@ class PCSQuizApp {
         exp.style.background = isCorrect ? 'rgba(34,197,94,0.1)' : 'rgba(239,68,68,0.1)';
         exp.style.borderLeft = isCorrect ? '5px solid var(--success)' : '5px solid var(--error)';
         exp.style.color = 'var(--text-main)';
-        exp.style.fontWeight = '600';
         exp.innerHTML = `<span style="color:${isCorrect ? 'var(--success)' : 'var(--error)'}; font-size:1.3rem; font-weight:800; display:block; margin-bottom:5px;">${isCorrect ? '✓ Excellent!' : '✗ Not quite.'}</span><span style="color:var(--text-muted); font-size:1rem; line-height:1.5;">${q.explanation}</span>`;
         document.querySelector('.question-card').appendChild(exp);
 
@@ -278,11 +281,11 @@ class PCSQuizApp {
         else if(pct >= 50) { msg = "Good effort. Room for improvement."; }
 
         wrapper.innerHTML = `
-            <div class="results-container">
-                <h1 class="results-title">Quiz Complete! 🏆</h1>
+            <div class="results-container" style="background:var(--bg-card); border-radius:var(--radius-xl); padding:40px 20px; box-shadow:var(--shadow-xl); border: 2px solid var(--primary); text-align:center;">
+                <h1 style="font-size:2.5rem; color:var(--primary); font-family:var(--font-secondary); margin-bottom:10px;">Quiz Complete! 🏆</h1>
                 <p style="color:var(--text-muted); font-size:1.2rem; font-weight:600; margin-bottom:30px;">${msg}</p>
                 
-                <div class="score-circle">
+                <div style="width:150px; height:150px; background:var(--gradient-hero); border-radius:50%; display:flex; justify-content:center; align-items:center; margin:0 auto 30px; box-shadow:0 10px 30px rgba(14,165,233,0.4); color:white; font-size:3rem; font-weight:900;">
                     ${pct}%
                 </div>
                 
@@ -335,3 +338,18 @@ document.addEventListener('DOMContentLoaded', function() {
     window.quizApp = new PCSQuizApp();
 });
 window.showScreen = function(id) { window.quizApp.showScreen(id); };
+
+// ==============================================================================
+// SERVICE WORKER REGISTRATION (Required for Adsterra Push & PWA Offline)
+// ==============================================================================
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/sw.js')
+            .then(function(registration) { 
+                console.log('[PCS Quixler] Service Worker Registered Successfully', registration.scope); 
+            })
+            .catch(function(error) { 
+                console.log('[PCS Quixler] Service Worker Registration Failed:', error); 
+            });
+    });
+}
