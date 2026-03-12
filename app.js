@@ -1,6 +1,7 @@
 // ============================================================
-// PCS Academy Quiz Application — BROWSER ONLY
-// No require() / No Node.js code. Server lives in server.js
+// PCS Academy Quiz Application — MASTER ENGINE v36.0
+// Features: Dark Mode, LocalStorage Tracking, 40+ Questions, 
+// Confetti Animation API, and Safe AdSense Pushing.
 // ============================================================
 
 class PCSQuizApp {
@@ -13,516 +14,324 @@ class PCSQuizApp {
         this.timer           = null;
         this.timeLeft        = 30;
         this.selectedAnswer  = null;
-        this.totalQuestions  = 10;
+        this.totalQuestions  = 10; // Number of questions per round
+        this.isDarkMode      = false;
+        
+        // Local Storage Tracking
+        this.totalLifetimeScore = parseInt(localStorage.getItem('pcs_quixler_score')) || 0;
 
+        // Massive 40+ Question Database
         this.questionDB = [
-            { id:1,  category:'Mathematics',       difficulty:'Easy',   question:'What is 15 + 27?',                                              options:['42','41','43','40'],                                                      correct:0, explanation:'15 + 27 = 42. Add ones (5+7=12, carry 1) then tens (1+2+1=4).' },
-            { id:2,  category:'Mathematics',       difficulty:'Easy',   question:'What is the square root of 144?',                               options:['11','12','13','14'],                                                      correct:1, explanation:'sqrt(144) = 12 because 12 x 12 = 144.' },
-            { id:3,  category:'Science',           difficulty:'Easy',   question:'What gas do plants absorb during photosynthesis?',               options:['Oxygen','Nitrogen','Carbon Dioxide','Hydrogen'],                          correct:2, explanation:'Plants absorb CO2 and convert it into glucose and oxygen using sunlight.' },
-            { id:4,  category:'Science',           difficulty:'Easy',   question:'How many bones are in an adult human body?',                     options:['206','205','207','204'],                                                  correct:0, explanation:'An adult human skeleton has 206 bones.' },
-            { id:5,  category:'History',           difficulty:'Easy',   question:'Who was the first President of India?',                          options:['Jawaharlal Nehru','Dr. Rajendra Prasad','Mahatma Gandhi','Sardar Patel'], correct:1, explanation:'Dr. Rajendra Prasad served as India\'s first President from 1950 to 1962.' },
-            { id:6,  category:'History',           difficulty:'Easy',   question:'In which year did India gain independence?',                     options:['1945','1946','1947','1948'],                                              correct:2, explanation:'India gained independence from British rule on August 15, 1947.' },
-            { id:7,  category:'General Knowledge', difficulty:'Easy',   question:'What is the capital of France?',                                options:['London','Berlin','Paris','Madrid'],                                       correct:2, explanation:'Paris is the capital and largest city of France.' },
-            { id:8,  category:'General Knowledge', difficulty:'Easy',   question:'What is the largest mammal in the world?',                      options:['Elephant','Blue Whale','Giraffe','Hippopotamus'],                         correct:1, explanation:'The Blue Whale is the largest animal ever known to have lived on Earth.' },
-            { id:9,  category:'Mathematics',       difficulty:'Medium', question:'What is 12 x 15?',                                              options:['180','175','185','170'],                                                  correct:0, explanation:'12 x 15 = 180. Calculate as (12x10)+(12x5) = 120+60.' },
-            { id:10, category:'Science',           difficulty:'Medium', question:'What is the chemical symbol for gold?',                         options:['Go','Gd','Au','Ag'],                                                      correct:2, explanation:'Au comes from the Latin word "aurum" meaning gold.' },
-            { id:11, category:'Mathematics',       difficulty:'Easy',   question:'What is 100 - 37?',                                             options:['63','62','64','61'],                                                      correct:0, explanation:'100 - 37 = 63.' },
-            { id:12, category:'Science',           difficulty:'Easy',   question:'Which planet is known as the Red Planet?',                      options:['Venus','Mars','Jupiter','Saturn'],                                        correct:1, explanation:'Mars looks red due to iron oxide (rust) on its surface.' },
-            { id:13, category:'General Knowledge', difficulty:'Easy',   question:'How many continents are there on Earth?',                       options:['5','6','7','8'],                                                          correct:2, explanation:'7 continents: Asia, Africa, North America, South America, Antarctica, Europe, Australia.' },
-            { id:14, category:'History',           difficulty:'Medium', question:'Who built the Taj Mahal?',                                      options:['Akbar','Shah Jahan','Humayun','Aurangzeb'],                               correct:1, explanation:'Shah Jahan built the Taj Mahal (~1653) in memory of his wife Mumtaz Mahal.' },
-            { id:15, category:'Mathematics',       difficulty:'Medium', question:'What is 25% of 80?',                                            options:['15','20','25','30'],                                                      correct:1, explanation:'25% of 80 = 80 / 4 = 20.' },
-            { id:16, category:'English',           difficulty:'Easy',   question:'What is the plural form of "child"?',                           options:['childs','childes','children','childs\''],                                 correct:2, explanation:'"Children" is the irregular plural of "child".' },
-            { id:17, category:'English',           difficulty:'Medium', question:'Which word is a synonym for "happy"?',                          options:['Sad','Joyful','Angry','Tired'],                                           correct:1, explanation:'"Joyful" is a synonym for "happy", both express positive emotions.' },
-            { id:18, category:'Science',           difficulty:'Medium', question:'What is the process where water changes from liquid to gas?',    options:['Condensation','Evaporation','Precipitation','Sublimation'],               correct:1, explanation:'Evaporation is the liquid-to-gas change driven by heat energy.' },
-            { id:19, category:'General Knowledge', difficulty:'Medium', question:'Which is the longest river in the world?',                      options:['Amazon River','Nile River','Mississippi River','Yangtze River'],         correct:1, explanation:'The Nile (~6,650 km) is generally considered the world\'s longest river.' },
-            { id:20, category:'History',           difficulty:'Easy',   question:'What year was PCS Academy School established?',                 options:['2020','2021','2022','2023'],                                              correct:2, explanation:'PCS Academy School was established in 2022.' }
+            { id:1, category:'Mathematics', difficulty:'Easy', question:'What is 15 + 27?', options:['42','41','43','40'], correct:0, explanation:'15 + 27 = 42.' },
+            { id:2, category:'Mathematics', difficulty:'Easy', question:'Square root of 144?', options:['11','12','13','14'], correct:1, explanation:'12 x 12 = 144.' },
+            { id:3, category:'Science', difficulty:'Easy', question:'Gas plants absorb?', options:['Oxygen','Nitrogen','Carbon Dioxide','Hydrogen'], correct:2, explanation:'Plants absorb CO2.' },
+            { id:4, category:'Science', difficulty:'Easy', question:'Bones in adult body?', options:['206','205','207','204'], correct:0, explanation:'Adults have 206 bones.' },
+            { id:5, category:'History', difficulty:'Easy', question:'First President of India?', options:['Nehru','Rajendra Prasad','Gandhi','Patel'], correct:1, explanation:'Dr. Rajendra Prasad.' },
+            { id:6, category:'History', difficulty:'Easy', question:'Year of Indian independence?', options:['1945','1946','1947','1948'], correct:2, explanation:'August 15, 1947.' },
+            { id:7, category:'General Knowledge', difficulty:'Easy', question:'Capital of France?', options:['London','Berlin','Paris','Madrid'], correct:2, explanation:'Paris.' },
+            { id:8, category:'General Knowledge', difficulty:'Easy', question:'Largest mammal?', options:['Elephant','Blue Whale','Giraffe','Hippo'], correct:1, explanation:'Blue Whale.' },
+            { id:9, category:'Mathematics', difficulty:'Medium', question:'12 x 15 = ?', options:['180','175','185','170'], correct:0, explanation:'12 x 15 = 180.' },
+            { id:10, category:'Science', difficulty:'Medium', question:'Symbol for gold?', options:['Go','Gd','Au','Ag'], correct:2, explanation:'Au (Aurum).' },
+            { id:11, category:'Mathematics', difficulty:'Easy', question:'100 - 37 = ?', options:['63','62','64','61'], correct:0, explanation:'100 - 37 = 63.' },
+            { id:12, category:'Science', difficulty:'Easy', question:'The Red Planet?', options:['Venus','Mars','Jupiter','Saturn'], correct:1, explanation:'Mars is the Red Planet.' },
+            { id:13, category:'General Knowledge', difficulty:'Easy', question:'Number of continents?', options:['5','6','7','8'], correct:2, explanation:'There are 7 continents.' },
+            { id:14, category:'History', difficulty:'Medium', question:'Who built the Taj Mahal?', options:['Akbar','Shah Jahan','Humayun','Aurangzeb'], correct:1, explanation:'Built by Shah Jahan.' },
+            { id:15, category:'Mathematics', difficulty:'Medium', question:'25% of 80?', options:['15','20','25','30'], correct:1, explanation:'25% of 80 is 20.' },
+            { id:16, category:'English', difficulty:'Easy', question:'Plural of "child"?', options:['childs','childes','children','childs\''], correct:2, explanation:'Children.' },
+            { id:17, category:'English', difficulty:'Medium', question:'Synonym for "happy"?', options:['Sad','Joyful','Angry','Tired'], correct:1, explanation:'Joyful means happy.' },
+            { id:18, category:'Science', difficulty:'Medium', question:'Liquid to gas process?', options:['Condensation','Evaporation','Precipitation','Sublimation'], correct:1, explanation:'Evaporation.' },
+            { id:19, category:'General Knowledge', difficulty:'Medium', question:'Longest river?', options:['Amazon','Nile','Mississippi','Yangtze'], correct:1, explanation:'The Nile River.' },
+            { id:20, category:'History', difficulty:'Easy', question:'PCS Academy established year?', options:['2020','2021','2022','2023'], correct:2, explanation:'Established in 2022.' },
+            { id:21, category:'Science', difficulty:'Hard', question:'Atomic number of Oxygen?', options:['6','7','8','9'], correct:2, explanation:'Oxygen is atomic number 8.' },
+            { id:22, category:'Mathematics', difficulty:'Hard', question:'Derivative of x^2?', options:['x','2x','2x^2','1'], correct:1, explanation:'Power rule: bring down the 2, subtract 1 from exponent.' },
+            { id:23, category:'General Knowledge', difficulty:'Medium', question:'Smallest country in the world?', options:['Monaco','Malta','Vatican City','San Marino'], correct:2, explanation:'Vatican City is the smallest.' },
+            { id:24, category:'History', difficulty:'Hard', question:'Year of the Battle of Plassey?', options:['1757','1764','1857','1864'], correct:0, explanation:'Fought in 1757.' },
+            { id:25, category:'English', difficulty:'Hard', question:'Antonym of "Obsolete"?', options:['Ancient','Current','Outdated','Hidden'], correct:1, explanation:'Current means modern, the opposite of obsolete.' },
+            { id:26, category:'Science', difficulty:'Medium', question:'Powerhouse of the cell?', options:['Nucleus','Ribosome','Mitochondria','Golgi'], correct:2, explanation:'Mitochondria generates ATP.' },
+            { id:27, category:'Mathematics', difficulty:'Medium', question:'Value of Pi to 2 decimals?', options:['3.12','3.14','3.16','3.18'], correct:1, explanation:'Pi is approximately 3.14.' },
+            { id:28, category:'General Knowledge', difficulty:'Hard', question:'Currency of Japan?', options:['Yen','Won','Yuan','Dollar'], correct:0, explanation:'The Japanese Yen.' },
+            { id:29, category:'History', difficulty:'Medium', question:'First man on the moon?', options:['Buzz Aldrin','Yuri Gagarin','Neil Armstrong','Michael Collins'], correct:2, explanation:'Neil Armstrong in 1969.' },
+            { id:30, category:'Science', difficulty:'Hard', question:'Fastest land animal?', options:['Lion','Cheetah','Leopard','Tiger'], correct:1, explanation:'The Cheetah can reach speeds over 60 mph.' },
+            { id:31, category:'Mathematics', difficulty:'Hard', question:'What is 7 cubed (7^3)?', options:['243','343','443','543'], correct:1, explanation:'7 x 7 x 7 = 343.' },
+            { id:32, category:'Science', difficulty:'Medium', question:'Which blood cells fight disease?', options:['Red','White','Platelets','Plasma'], correct:1, explanation:'White blood cells form the immune system.' },
+            { id:33, category:'History', difficulty:'Hard', question:'Who discovered America in 1492?', options:['Vasco da Gama','Christopher Columbus','Ferdinand Magellan','Marco Polo'], correct:1, explanation:'Christopher Columbus in 1492.' },
+            { id:34, category:'General Knowledge', difficulty:'Medium', question:'How many strings on a standard guitar?', options:['4','5','6','7'], correct:2, explanation:'A standard guitar has 6 strings.' },
+            { id:35, category:'English', difficulty:'Hard', question:'What is a palindrome?', options:['Word spelt same backwards','A type of poem','A synonym','An exaggeration'], correct:0, explanation:'E.g., racecar or radar.' },
+            { id:36, category:'Science', difficulty:'Hard', question:'What is the hardest natural substance?', options:['Gold','Iron','Diamond','Platinum'], correct:2, explanation:'Diamond is the hardest naturally occurring substance.' },
+            { id:37, category:'Mathematics', difficulty:'Medium', question:'How many degrees in a circle?', options:['180','270','360','400'], correct:2, explanation:'A full circle has 360 degrees.' },
+            { id:38, category:'History', difficulty:'Hard', question:'Who was the iron man of India?', options:['Bhagat Singh','Sardar Patel','Subhas Chandra Bose','Lala Lajpat Rai'], correct:1, explanation:'Sardar Vallabhbhai Patel.' },
+            { id:39, category:'General Knowledge', difficulty:'Hard', question:'What is the capital of Australia?', options:['Sydney','Melbourne','Canberra','Perth'], correct:2, explanation:'Canberra is the capital.' },
+            { id:40, category:'Science', difficulty:'Medium', question:'Which planet is closest to the sun?', options:['Venus','Earth','Mars','Mercury'], correct:3, explanation:'Mercury is the closest planet.' }
         ];
 
-        this.injectStyles();
         this.init();
     }
 
-    // ── Boot ───────────────────────────────────────────────────
     init() {
-        var self = this;
-        document.querySelectorAll('.particle').forEach(function(p, i) {
-            p.style.animationDelay = (i * 0.5) + 's';
-        });
+        const self = this;
+        
+        // Setup Dark Mode toggle
+        document.getElementById('theme-toggle').addEventListener('click', () => this.toggleTheme());
+        
+        // Update Lifetime Score UI
+        const scoreDisplay = document.getElementById('user-score-display');
+        if(scoreDisplay) scoreDisplay.innerText = this.totalLifetimeScore;
 
-        // Show home after 3.5s
+        // Splash Screen sequence
         setTimeout(function() {
             self.showScreen('home-screen');
-            // Push all AdSense slots 600ms after home is visible
-            setTimeout(function() {
-                try {
-                    document.querySelectorAll('ins.adsbygoogle').forEach(function(ins) {
-                        if (!ins.getAttribute('data-adsbygoogle-status')) {
-                            (window.adsbygoogle = window.adsbygoogle || []).push({});
-                        }
-                    });
-                } catch(e) { /* AdSense not ready */ }
-            }, 600);
-        }, 3500);
+            document.getElementById('main-ui').style.display = 'block';
+            
+            // Push AdSense dynamically safely
+            try { 
+                document.querySelectorAll('ins.adsbygoogle').forEach((ins) => {
+                    if (!ins.getAttribute('data-adsbygoogle-status')) {
+                        (window.adsbygoogle = window.adsbygoogle || []).push({}); 
+                    }
+                });
+            } catch(e) {}
+        }, 2500);
 
         this.setupEventListeners();
     }
 
-    // ── Screen switching ───────────────────────────────────────
+    toggleTheme() {
+        this.isDarkMode = !this.isDarkMode;
+        if(this.isDarkMode) {
+            document.body.classList.add('dark-theme');
+            document.getElementById('theme-toggle').innerText = '☀️';
+        } else {
+            document.body.classList.remove('dark-theme');
+            document.getElementById('theme-toggle').innerText = '🌙';
+        }
+    }
+
     showScreen(screenId) {
-        var target = document.getElementById(screenId);
-        if (!target) { console.error('Screen not found:', screenId); return; }
-
-        document.querySelectorAll('.screen').forEach(function(s) {
-            s.classList.remove('active');
-            s.style.display = 'none';
-        });
-
-        target.classList.add('active');
-        target.style.display = (screenId === 'splash-screen') ? 'flex' : 'block';
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        const target = document.getElementById(screenId);
+        if (target) target.classList.add('active');
+        
+        // Active Nav State Update
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        const navBtn = document.getElementById('nav-' + screenId.split('-')[0]);
+        if(navBtn) navBtn.classList.add('active');
 
         this.currentScreen = screenId;
         if (screenId === 'quiz-screen') this.startQuiz();
         window.scrollTo(0, 0);
     }
 
-    // ── Events ─────────────────────────────────────────────────
     setupEventListeners() {
-        var self = this;
-
+        const self = this;
         document.addEventListener('click', function(e) {
-            var btn = e.target.closest('.option-button');
+            const btn = e.target.closest('.option-button');
             if (btn && !btn.disabled) self.selectAnswer(btn);
         });
-
-        var submitBtn = document.getElementById('submit-answer');
-        var nextBtn   = document.getElementById('next-question');
-        if (submitBtn) submitBtn.addEventListener('click', function() { self.submitAnswer(); });
-        if (nextBtn)   nextBtn.addEventListener('click',   function() { self.nextQuestion(); });
-
-        document.addEventListener('keydown', function(e) {
-            if (self.currentScreen !== 'quiz-screen') return;
-            var map = { a:0, b:1, c:2, d:3 };
-            var idx = map[e.key.toLowerCase()];
-            if (idx !== undefined) {
-                self.selectAnswerByIndex(idx);
-            } else if ((e.key === 'Enter' || e.key === ' ') && self.selectedAnswer !== null) {
-                e.preventDefault();
-                self.submitAnswer();
-            }
-        });
-
-        var form = document.querySelector('.newsletter-form');
-        if (form) {
-            form.querySelector('.newsletter-btn').addEventListener('click', function() {
-                self.handleNewsletterSignup();
-            });
-        }
     }
 
-    // ── Quiz lifecycle ─────────────────────────────────────────
     startQuiz() {
         this.currentQuestion = 0;
-        this.userAnswers     = [];
-        this.score           = 0;
-        this.selectedAnswer  = null;
-        this.quizQuestions   = this.shuffleArray(this.questionDB.slice()).slice(0, this.totalQuestions);
+        this.score = 0;
+        this.userAnswers = [];
+        // Randomly select X questions
+        this.quizQuestions = this.questionDB.sort(() => 0.5 - Math.random()).slice(0, this.totalQuestions);
 
-        // Rebuild quiz DOM if results screen replaced it
-        var self    = this;
-        var wrapper = document.querySelector('.quiz-wrapper');
-        if (wrapper && !wrapper.querySelector('.quiz-header')) {
-            wrapper.innerHTML =
-                '<div class="quiz-header">' +
-                '<button onclick="showScreen(\'home-screen\')" class="super-back-btn"><span class="btn-icon">&#8592;</span> Back to Home</button>' +
-                '<div class="quiz-progress-info">' +
-                '<div class="question-indicator">' +
-                '<span id="question-counter" class="question-number">Question 1 of 10</span>' +
-                '<div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>' +
-                '</div>' +
-                '<div class="timer-container"><div class="timer-circle">' +
-                '<div class="timer-text" id="timer">30</div>' +
-                '<svg class="timer-svg" viewBox="0 0 36 36">' +
-                '<circle cx="18" cy="18" r="16" fill="none" stroke="#e0f2fe" stroke-width="2"/>' +
-                '<circle id="timer-progress" cx="18" cy="18" r="16" fill="none" stroke="#29b6f6" stroke-width="2" stroke-dasharray="100 100" stroke-dashoffset="0"/>' +
-                '</svg></div></div>' +
-                '</div></div>' +
-                '<div class="quiz-content">' +
-                '<div class="question-card">' +
-                '<div class="question-header">' +
-                '<span class="question-category" id="question-category">Mathematics</span>' +
-                '<span class="question-difficulty" id="question-difficulty">Easy</span>' +
-                '</div>' +
-                '<h2 id="question-text" class="question-title">Loading...</h2>' +
-                '</div>' +
-                '<div class="options-grid" id="options-container"></div>' +
-                '<div class="quiz-actions">' +
-                '<button id="submit-answer" class="super-btn primary large"><span class="btn-icon">&#10003;</span> Submit Answer</button>' +
-                '<button id="next-question" class="super-btn primary large" style="display:none"><span class="btn-icon">&#8594;</span> Next Question</button>' +
-                '</div></div>' +
-                '<div class="display-ad-container">' +
-                '<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5236839570529719" data-ad-slot="1768612586" data-ad-format="auto" data-full-width-responsive="true"></ins>' +
-                '</div>';
+        const wrapper = document.getElementById('quiz-wrapper-dom');
+        wrapper.innerHTML = `
+            <div class="quiz-header">
+                <button onclick="window.quizApp.showScreen('home-screen')" class="super-btn secondary"><span class="btn-icon">←</span> Abort</button>
+                <div style="text-align:center;">
+                    <h3 style="color:var(--primary); font-weight:800; font-size:1.2rem; margin:0;">Question <span id="q-num">1</span> of ${this.totalQuestions}</h3>
+                    <div style="width:150px; height:6px; background:var(--gray-200); border-radius:10px; margin-top:5px; overflow:hidden;">
+                        <div id="progress-fill" style="width:10%; height:100%; background:var(--gradient-primary); transition:width 0.3s;"></div>
+                    </div>
+                </div>
+                <h3 style="color:var(--error); font-weight:800; font-size:1.5rem; margin:0;">⏳ <span id="timer">30</span>s</h3>
+            </div>
+            <div class="question-card">
+                <span style="background:var(--sky-blue-100); color:var(--primary-dark); padding:5px 15px; border-radius:20px; font-weight:bold; font-size:0.8rem; text-transform:uppercase;" id="q-cat">Category</span>
+                <span id="q-diff" class="badge" style="margin-left:10px;">Easy</span>
+                <h2 id="q-text" class="question-title mt-4">Question Text</h2>
+            </div>
+            <div class="options-grid" id="options-container"></div>
+            <div class="quiz-actions">
+                <button id="submit-answer" class="super-btn primary large full-width shadow-glow">Submit Answer ✓</button>
+                <button id="next-question" class="super-btn primary large full-width shadow-glow" style="display:none;">Next Question ➔</button>
+            </div>
+        `;
 
-            document.getElementById('submit-answer').addEventListener('click', function() { self.submitAnswer(); });
-            document.getElementById('next-question').addEventListener('click', function() { self.nextQuestion(); });
-        }
+        document.getElementById('submit-answer').addEventListener('click', () => this.submitAnswer());
+        document.getElementById('next-question').addEventListener('click', () => this.nextQuestion());
 
         this.displayQuestion();
-        this.updateProgressBar();
     }
 
     displayQuestion() {
-        var q = this.quizQuestions[this.currentQuestion];
+        const q = this.quizQuestions[this.currentQuestion];
+        document.getElementById('q-num').innerText = this.currentQuestion + 1;
+        document.getElementById('q-cat').innerText = q.category;
+        
+        const diffBadge = document.getElementById('q-diff');
+        diffBadge.innerText = q.difficulty;
+        diffBadge.className = `badge ${q.difficulty.toLowerCase()}`;
+        
+        document.getElementById('q-text').innerText = q.question;
+        document.getElementById('progress-fill').style.width = `${((this.currentQuestion + 1) / this.totalQuestions) * 100}%`;
 
-        var counter = document.getElementById('question-counter');
-        if (counter) counter.textContent = 'Question ' + (this.currentQuestion + 1) + ' of ' + this.quizQuestions.length;
-
-        var catEl  = document.getElementById('question-category');
-        var diffEl = document.getElementById('question-difficulty');
-        if (catEl)  catEl.textContent  = q.category;
-        if (diffEl) { diffEl.textContent = q.difficulty; diffEl.className = 'question-difficulty ' + q.difficulty.toLowerCase(); }
-
-        var textEl = document.getElementById('question-text');
-        if (textEl) textEl.textContent = q.question;
-
-        var container = document.getElementById('options-container');
-        if (container) {
-            container.innerHTML = '';
-            for (var i = 0; i < q.options.length; i++) {
-                var btn = document.createElement('button');
-                btn.className     = 'option-button';
-                btn.dataset.index = i;
-                btn.innerHTML     = '<div class="option-content"><span class="option-letter">' + String.fromCharCode(65 + i) + '</span><span class="option-text">' + q.options[i] + '</span></div>';
-                container.appendChild(btn);
-            }
-        }
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
+        
+        q.options.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-button';
+            btn.dataset.index = i;
+            btn.innerHTML = `<span style="font-weight:900; color:var(--primary); margin-right:15px; background:rgba(14,165,233,0.1); width:35px; height:35px; min-width:35px; display:inline-flex; align-items:center; justify-content:center; border-radius:50%;">${String.fromCharCode(65 + i)}</span> <span>${opt}</span>`;
+            container.appendChild(btn);
+        });
 
         this.selectedAnswer = null;
-        var submitBtn = document.getElementById('submit-answer');
-        var nextBtn   = document.getElementById('next-question');
-        if (submitBtn) submitBtn.style.display = 'inline-flex';
-        if (nextBtn)   nextBtn.style.display   = 'none';
-
-        var prev = document.querySelector('.explanation');
-        if (prev) prev.remove();
+        document.getElementById('submit-answer').style.display = 'inline-flex';
+        document.getElementById('next-question').style.display = 'none';
+        
+        const existingExp = document.getElementById('exp-box');
+        if(existingExp) existingExp.remove();
 
         this.startTimer();
     }
 
     selectAnswer(btn) {
-        document.querySelectorAll('.option-button').forEach(function(o) { o.classList.remove('selected'); });
+        document.querySelectorAll('.option-button').forEach(o => o.classList.remove('selected'));
         btn.classList.add('selected');
         this.selectedAnswer = parseInt(btn.dataset.index);
     }
 
-    selectAnswerByIndex(i) {
-        var opts = document.querySelectorAll('.option-button');
-        if (opts[i]) this.selectAnswer(opts[i]);
-    }
-
     submitAnswer() {
         if (this.selectedAnswer === null) {
-            this.showNotification('Please select an answer before submitting!', 'warning');
+            alert('Please select an answer!');
             return;
         }
         clearInterval(this.timer);
-        var q    = this.quizQuestions[this.currentQuestion];
-        var self = this;
+        const q = this.quizQuestions[this.currentQuestion];
+        const isCorrect = (this.selectedAnswer === q.correct);
 
-        document.querySelectorAll('.option-button').forEach(function(btn, i) {
+        document.querySelectorAll('.option-button').forEach((btn, i) => {
             btn.disabled = true;
-            if (i === q.correct) {
-                btn.classList.add('correct');
-                self.addIndicator(btn, '&#10003;', 'correct');
-            } else if (i === self.selectedAnswer && i !== q.correct) {
-                btn.classList.add('incorrect');
-                self.addIndicator(btn, '&#10007;', 'incorrect');
-            }
+            if (i === q.correct) btn.classList.add('correct');
+            else if (i === this.selectedAnswer) btn.classList.add('incorrect');
         });
 
-        var isCorrect = (this.selectedAnswer === q.correct);
-        this.userAnswers.push({ questionId:q.id, question:q.question, selected:this.selectedAnswer, correct:q.correct, isCorrect:isCorrect, category:q.category });
+        if (isCorrect) this.score++;
+        
+        // Detailed Explanation Injection
+        const exp = document.createElement('div');
+        exp.id = 'exp-box';
+        exp.style.marginTop = '25px';
+        exp.style.padding = '20px';
+        exp.style.borderRadius = '15px';
+        exp.style.background = isCorrect ? 'rgba(34,197,94,0.1)' : 'rgba(239,68,68,0.1)';
+        exp.style.borderLeft = isCorrect ? '5px solid var(--success)' : '5px solid var(--error)';
+        exp.style.color = 'var(--text-main)';
+        exp.style.fontWeight = '600';
+        exp.innerHTML = `<span style="color:${isCorrect ? 'var(--success)' : 'var(--error)'}; font-size:1.3rem; font-weight:800; display:block; margin-bottom:5px;">${isCorrect ? '✓ Excellent!' : '✗ Not quite.'}</span><span style="color:var(--text-muted); font-size:1rem; line-height:1.5;">${q.explanation}</span>`;
+        document.querySelector('.question-card').appendChild(exp);
 
-        if (isCorrect) { this.score++; this.showNotification('Correct! Well done! \uD83C\uDF89', 'success'); }
-        else           {               this.showNotification('Incorrect. Learn from this! \uD83D\uDCDA', 'error'); }
-
-        this.showExplanation(q.explanation, isCorrect);
-
-        var submitBtn = document.getElementById('submit-answer');
-        var nextBtn   = document.getElementById('next-question');
-        if (submitBtn) submitBtn.style.display = 'none';
-        if (nextBtn)   nextBtn.style.display   = 'inline-flex';
-    }
-
-    addIndicator(btn, symbol, type) {
-        var el = document.createElement('div');
-        el.className = 'answer-indicator ' + type;
-        el.innerHTML = symbol;
-        btn.appendChild(el);
-    }
-
-    showExplanation(text, isCorrect) {
-        var div = document.createElement('div');
-        div.className = 'explanation ' + (isCorrect ? 'correct' : 'incorrect');
-        div.innerHTML =
-            '<div class="explanation-header">' +
-            '<span class="explanation-icon">' + (isCorrect ? '&#10003;' : '&#10007;') + '</span>' +
-            '<span class="explanation-status">' + (isCorrect ? 'Correct!' : 'Incorrect') + '</span>' +
-            '</div>' +
-            '<div class="explanation-text">' + text + '</div>';
-        var card = document.querySelector('.question-card');
-        if (card) card.appendChild(div);
+        document.getElementById('submit-answer').style.display = 'none';
+        document.getElementById('next-question').style.display = 'inline-flex';
     }
 
     nextQuestion() {
         this.currentQuestion++;
         if (this.currentQuestion < this.quizQuestions.length) {
             this.displayQuestion();
-            this.updateProgressBar();
         } else {
             this.showResults();
         }
     }
 
-    updateProgressBar() {
-        var fill = document.getElementById('progress-fill');
-        if (fill) fill.style.width = ((this.currentQuestion + 1) / this.quizQuestions.length * 100) + '%';
+    triggerConfetti() {
+        if (typeof confetti === 'function') {
+            const duration = 3000;
+            const end = Date.now() + duration;
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#0ea5e9', '#38bdf8'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#22c55e', '#ff9800'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+        }
     }
 
-    // ── Results ────────────────────────────────────────────────
     showResults() {
         clearInterval(this.timer);
-        var pct    = Math.round(this.score / this.quizQuestions.length * 100);
-        var levels = [
-            { min:90, msg:'Outstanding! Exceptional performance!',   emoji:'\uD83C\uDFC6' },
-            { min:80, msg:'Excellent work! Great job!',              emoji:'\uD83C\uDF89' },
-            { min:70, msg:'Good job! Keep up the good work!',        emoji:'\uD83D\uDC4D' },
-            { min:60, msg:'Fair performance. More practice needed.', emoji:'\uD83D\uDCDA' },
-            { min:0,  msg:'Keep studying and try again!',            emoji:'\uD83D\uDCAA' }
-        ];
-        var level = levels.find(function(l) { return pct >= l.min; });
-        var stats = this.calculateCategoryStats();
+        
+        // Save to local storage
+        this.totalLifetimeScore += this.score;
+        localStorage.setItem('pcs_quixler_score', this.totalLifetimeScore);
+        const scoreDisplay = document.getElementById('user-score-display');
+        if(scoreDisplay) scoreDisplay.innerText = this.totalLifetimeScore;
 
-        var statsHTML = stats.map(function(s) {
-            return '<div class="category-stat-item">' +
-                '<span class="category-name">' + s.category + '</span>' +
-                '<div class="category-bar"><div class="category-fill" style="width:' + s.percentage + '%"></div></div>' +
-                '<span class="category-percentage">' + s.percentage + '%</span>' +
-                '</div>';
-        }).join('');
+        const pct = Math.round((this.score / this.quizQuestions.length) * 100);
+        const wrapper = document.getElementById('quiz-wrapper-dom');
+        
+        let msg = "Keep studying and try again!";
+        if(pct >= 90) { msg = "Incredible Mastery! Perfect!"; this.triggerConfetti(); }
+        else if(pct >= 70) { msg = "Great Job! You have solid knowledge."; if(typeof confetti === 'function') confetti(); }
+        else if(pct >= 50) { msg = "Good effort. Room for improvement."; }
 
-        var wrapper = document.querySelector('.quiz-wrapper');
-        if (!wrapper) return;
-
-        wrapper.innerHTML =
-            '<div class="results-container">' +
-            '<div class="results-header">' +
-            '<h1 class="results-title">Quiz Complete! ' + level.emoji + '</h1>' +
-            '<div class="results-score-circle"><div class="score-circle-inner">' +
-            '<span class="score-percentage">' + pct + '%</span>' +
-            '<span class="score-label">Score</span>' +
-            '</div></div></div>' +
-            '<div class="results-summary">' +
-            '<div class="summary-item"><span class="summary-number">' + this.score + '</span><span class="summary-label">Correct</span></div>' +
-            '<div class="summary-item"><span class="summary-number">' + (this.quizQuestions.length - this.score) + '</span><span class="summary-label">Incorrect</span></div>' +
-            '<div class="summary-item"><span class="summary-number">' + this.quizQuestions.length + '</span><span class="summary-label">Total</span></div>' +
-            '</div>' +
-            '<div class="results-message"><h3>' + level.msg + '</h3></div>' +
-            '<div class="category-performance"><h3>Performance by Category</h3>' +
-            '<div class="category-stats">' + statsHTML + '</div></div>' +
-            '<div class="results-actions">' +
-            '<button onclick="quizApp.startQuiz()" class="super-btn primary large"><span class="btn-icon">\uD83D\uDD04</span> Take Quiz Again</button>' +
-            '<button onclick="quizApp.showScreen(\'home-screen\')" class="super-btn secondary large"><span class="btn-icon">\uD83C\uDFE0</span> Back to Home</button>' +
-            '</div>' +
-            '<div class="display-ad-container">' +
-            '<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5236839570529719" data-ad-slot="1768612586" data-ad-format="auto" data-full-width-responsive="true"></ins>' +
-            '</div></div>';
-
-        // Push ad for newly created slot
-        try {
-            (window.adsbygoogle = window.adsbygoogle || []).push({});
-        } catch(e) {}
+        wrapper.innerHTML = `
+            <div class="results-container">
+                <h1 class="results-title">Quiz Complete! 🏆</h1>
+                <p style="color:var(--text-muted); font-size:1.2rem; font-weight:600; margin-bottom:30px;">${msg}</p>
+                
+                <div class="score-circle">
+                    ${pct}%
+                </div>
+                
+                <div style="display:flex; justify-content:space-around; background:var(--sky-blue-50); padding:25px; border-radius:20px; margin-bottom:30px; border: 1px solid var(--sky-blue-100);">
+                    <div><span style="font-size:2.5rem; font-weight:900; color:var(--success); display:block; line-height:1;">${this.score}</span><span style="font-size:0.85rem; color:var(--gray-600); font-weight:700; text-transform:uppercase;">Correct</span></div>
+                    <div><span style="font-size:2.5rem; font-weight:900; color:var(--error); display:block; line-height:1;">${this.totalQuestions - this.score}</span><span style="font-size:0.85rem; color:var(--gray-600); font-weight:700; text-transform:uppercase;">Incorrect</span></div>
+                </div>
+                
+                <div style="display:flex; flex-direction:column; gap:15px; max-width: 400px; margin: 0 auto;">
+                    <button onclick="window.quizApp.startQuiz()" class="super-btn primary large full-width shadow-glow">↺ Play Again</button>
+                    <button onclick="window.quizApp.showScreen('home-screen')" class="super-btn secondary large full-width">🏠 Return Home</button>
+                    
+                    <a href="https://www.effectivegatecpm.com/h4acaqe6?key=4d984694b18d8e6d5e26145d1ac8a80f" target="_blank" class="super-btn warning large full-width glow-pulse" style="margin-top:20px; text-decoration:none; border-color: #ff9800; color: #fff;">
+                        <span class="btn-icon">🎁</span> Claim Completion Reward
+                    </a>
+                </div>
+            </div>
+        `;
     }
 
-    calculateCategoryStats() {
-        var cats = {};
-        this.userAnswers.forEach(function(a) {
-            if (!cats[a.category]) cats[a.category] = { correct:0, total:0 };
-            cats[a.category].total++;
-            if (a.isCorrect) cats[a.category].correct++;
-        });
-        return Object.keys(cats).map(function(c) {
-            return { category:c, correct:cats[c].correct, total:cats[c].total, percentage:Math.round(cats[c].correct / cats[c].total * 100) };
-        });
-    }
-
-    // ── Timer ──────────────────────────────────────────────────
     startTimer() {
         clearInterval(this.timer);
         this.timeLeft = 30;
-        var self      = this;
-
-        this.timer = setInterval(function() {
-            self.timeLeft--;
-            var timerText = document.getElementById('timer');
-            var timerProg = document.getElementById('timer-progress');
-            if (timerText) timerText.textContent = self.timeLeft;
-            if (timerProg) timerProg.style.strokeDashoffset = (100 - self.timeLeft / 30 * 100).toString();
-
-            var color = self.timeLeft <= 5 ? '#f44336' : self.timeLeft <= 10 ? '#ff9800' : '#29b6f6';
-            if (timerText) timerText.style.color = color;
-            if (timerProg) timerProg.style.stroke  = color;
-
-            if (self.timeLeft <= 0) {
-                clearInterval(self.timer);
-                if (self.selectedAnswer === null) {
-                    self.showNotification("Time's up! Moving to next question.", 'warning');
-                    self.nextQuestion();
+        document.getElementById('timer').textContent = this.timeLeft;
+        document.getElementById('timer').style.color = 'var(--primary)';
+        
+        this.timer = setInterval(() => {
+            this.timeLeft--;
+            const t = document.getElementById('timer');
+            if(t) {
+                t.textContent = this.timeLeft;
+                if(this.timeLeft <= 10) t.style.color = 'var(--warning)';
+                if(this.timeLeft <= 5) t.style.color = 'var(--error)';
+            }
+            
+            if (this.timeLeft <= 0) {
+                clearInterval(this.timer);
+                if (this.selectedAnswer === null) {
+                    this.nextQuestion();
                 } else {
-                    self.submitAnswer();
+                    this.submitAnswer();
                 }
             }
         }, 1000);
     }
-
-    // ── Notification ───────────────────────────────────────────
-    showNotification(message, type) {
-        document.querySelectorAll('.pcs-notif').forEach(function(n) { n.remove(); });
-        var n = document.createElement('div');
-        n.className = 'pcs-notif pcs-notif-' + (type || 'info');
-        n.innerHTML = '<span>' + message + '</span><button onclick="this.parentElement.remove()">&#215;</button>';
-        document.body.appendChild(n);
-        setTimeout(function() {
-            if (n.parentElement) { n.style.opacity = '0'; setTimeout(function() { n.remove(); }, 300); }
-        }, 4000);
-    }
-
-    // ── Newsletter ─────────────────────────────────────────────
-    handleNewsletterSignup() {
-        var input = document.querySelector('.newsletter-input');
-        var email = input ? input.value.trim() : '';
-        if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            this.showNotification('Thank you for subscribing!', 'success');
-            if (input) input.value = '';
-        } else {
-            this.showNotification('Please enter a valid email address.', 'error');
-        }
-    }
-
-    // ── Helpers ────────────────────────────────────────────────
-    shuffleArray(arr) {
-        for (var i = arr.length - 1; i > 0; i--) {
-            var j   = Math.floor(Math.random() * (i + 1));
-            var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
-        }
-        return arr;
-    }
-
-    // ── Injected styles ────────────────────────────────────────
-    injectStyles() {
-        if (document.getElementById('pcs-dyn')) return;
-        var s = document.createElement('style');
-        s.id  = 'pcs-dyn';
-        s.textContent =
-            '@keyframes btnRipple { to { transform:scale(2.5);opacity:0; } }' +
-            '@keyframes slideInRight { from { transform:translateX(110%);opacity:0; } to { transform:translateX(0);opacity:1; } }' +
-            '.pcs-notif { position:fixed;top:20px;right:20px;z-index:10000;display:flex;align-items:center;gap:1rem;max-width:380px;padding:.85rem 1.1rem;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.18);animation:slideInRight .3s ease-out;transition:opacity .3s;font-size:.95rem;font-weight:500; }' +
-            '.pcs-notif button { background:none;border:none;color:inherit;font-size:1.3rem;cursor:pointer;opacity:.7;margin-left:auto; }' +
-            '.pcs-notif-success { background:#4caf50;color:#fff; }' +
-            '.pcs-notif-error   { background:#f44336;color:#fff; }' +
-            '.pcs-notif-warning { background:#ff9800;color:#fff; }' +
-            '.pcs-notif-info    { background:#29b6f6;color:#fff; }' +
-            '.option-content { display:flex;align-items:center;gap:1rem; }' +
-            '.option-letter { display:flex;align-items:center;justify-content:center;width:32px;height:32px;min-width:32px;background:rgba(41,182,246,.12);color:#29b6f6;border-radius:50%;font-weight:700;font-size:.9rem;transition:.15s; }' +
-            '.option-button.selected .option-letter,.option-button.correct .option-letter,.option-button.incorrect .option-letter { background:rgba(255,255,255,.25);color:#fff; }' +
-            '.option-text { flex:1; }' +
-            '.answer-indicator { position:absolute;right:1rem;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;background:rgba(255,255,255,.3);color:#fff; }' +
-            '.explanation { margin-top:1.5rem;padding:1.25rem 1.5rem;border-radius:12px;border-left:4px solid; }' +
-            '.explanation.correct   { background:#e8f5e9;border-color:#4caf50; }' +
-            '.explanation.incorrect { background:#ffebee;border-color:#f44336; }' +
-            '.explanation-header { display:flex;align-items:center;gap:.5rem;font-weight:700;margin-bottom:.5rem;font-size:1.05rem; }' +
-            '.explanation.correct   .explanation-header { color:#2e7d32; }' +
-            '.explanation.incorrect .explanation-header { color:#c62828; }' +
-            '.explanation-text { color:#555;line-height:1.6;font-size:.95rem; }' +
-            '.question-difficulty.easy   { background:#e8f5e9;color:#2e7d32; }' +
-            '.question-difficulty.medium { background:#fff3e0;color:#e65100; }' +
-            '.question-difficulty.hard   { background:#ffebee;color:#c62828; }' +
-            '.results-container { max-width:600px;margin:2rem auto;padding:2rem;text-align:center;background:#fff;border-radius:20px;box-shadow:0 20px 40px rgba(41,182,246,.15);border:1px solid #e0f2fe; }' +
-            '.results-title { font-size:2rem;color:#29b6f6;margin-bottom:1.5rem; }' +
-            '.results-score-circle { width:150px;height:150px;margin:0 auto 1.5rem;border-radius:50%;background:linear-gradient(135deg,#29b6f6,#0288d1);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(41,182,246,.35); }' +
-            '.score-circle-inner { color:#fff;text-align:center; }' +
-            '.score-percentage { display:block;font-size:2.5rem;font-weight:800; }' +
-            '.score-label { font-size:.9rem;opacity:.9;text-transform:uppercase;letter-spacing:.06em; }' +
-            '.results-summary { display:flex;justify-content:space-around;margin:1.5rem 0;padding:1.4rem;background:#f0f9ff;border-radius:14px; }' +
-            '.summary-number { display:block;font-size:1.8rem;font-weight:700;color:#29b6f6; }' +
-            '.summary-label { font-size:.85rem;color:#666;text-transform:uppercase; }' +
-            '.results-message { margin:1.5rem 0;padding:1rem 1.25rem;border-left:4px solid #29b6f6;border-radius:0 10px 10px 0;background:#f9feff;text-align:left; }' +
-            '.results-message h3 { color:#29b6f6;margin:0; }' +
-            '.category-performance { margin:1.5rem 0;text-align:left; }' +
-            '.category-performance > h3 { text-align:center;color:#29b6f6;margin-bottom:1rem; }' +
-            '.category-stats { display:flex;flex-direction:column;gap:.8rem; }' +
-            '.category-stat-item { display:flex;align-items:center;gap:.75rem; }' +
-            '.category-name { min-width:130px;font-weight:600;font-size:.88rem; }' +
-            '.category-bar { flex:1;height:8px;background:#e0e0e0;border-radius:4px;overflow:hidden; }' +
-            '.category-fill { height:100%;background:#29b6f6;transition:width 1s ease-in-out; }' +
-            '.category-percentage { min-width:42px;text-align:right;font-weight:600;color:#29b6f6;font-size:.88rem; }' +
-            '.results-actions { display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:2rem; }';
-        document.head.appendChild(s);
-    }
 }
 
-// ── Global helpers ────────────────────────────────────────────
-function showScreen(screenId) {
-    if (window.quizApp) window.quizApp.showScreen(screenId);
-}
-
-// ── Contact Form (no mailto: form action — avoids Mixed Content) ──
-function handleContactForm(e) {
-    e.preventDefault();
-    var name    = (document.getElementById('name')    || {}).value || '';
-    var email   = (document.getElementById('email')   || {}).value || '';
-    var subject = (document.getElementById('subject') || {}).value || '';
-    var message = (document.getElementById('message') || {}).value || '';
-
-    if (!name || !email || !subject || !message) {
-        if (window.quizApp) window.quizApp.showNotification('Please fill in all fields.', 'warning');
-        return;
-    }
-    var body = encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\n\n' + message);
-    var sub  = encodeURIComponent(subject + ' — ' + name);
-    window.location.href = 'mailto:pcsacademyschool@gmail.com?subject=' + sub + '&body=' + body;
-    if (window.quizApp) window.quizApp.showNotification('Opening your email client...', 'success');
-    document.getElementById('contact-form').reset();
-}
-
-// ── Boot ──────────────────────────────────────────────────────
+// Global Boot Execution
 document.addEventListener('DOMContentLoaded', function() {
     window.quizApp = new PCSQuizApp();
-
-    // Card hover lift
-    document.querySelectorAll('.feature-card, .contact-method').forEach(function(card) {
-        card.addEventListener('mouseenter', function() { card.style.transform = 'translateY(-5px)'; });
-        card.addEventListener('mouseleave', function() { card.style.transform = ''; });
-    });
-
-    // Button ripple effect
-    document.addEventListener('click', function(e) {
-        var btn = e.target.closest('.super-btn, .option-button');
-        if (!btn) return;
-        var r    = document.createElement('div');
-        var rect = btn.getBoundingClientRect();
-        var size = Math.max(rect.width, rect.height);
-        r.style.cssText =
-            'position:absolute;border-radius:50%;pointer-events:none;' +
-            'width:' + size + 'px;height:' + size + 'px;' +
-            'left:' + (e.clientX - rect.left - size / 2) + 'px;' +
-            'top:'  + (e.clientY - rect.top  - size / 2) + 'px;' +
-            'background:rgba(255,255,255,.3);transform:scale(0);animation:btnRipple .6s linear;';
-        btn.style.position = 'relative';
-        btn.style.overflow = 'hidden';
-        btn.appendChild(r);
-        setTimeout(function() { r.remove(); }, 600);
-    });
 });
-
-window.PCSQuizApp = PCSQuizApp;
+window.showScreen = function(id) { window.quizApp.showScreen(id); };
